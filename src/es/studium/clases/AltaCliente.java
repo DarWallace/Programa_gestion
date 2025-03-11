@@ -14,28 +14,28 @@ import java.sql.Connection;
 
 
 
-public class AltaSede implements WindowListener, ActionListener
+public class AltaCliente implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Alta Sede");
-	Label lblSede = new Label("Sede:");
-	TextField txtSede = new TextField(20);
-	Label lblLocalidad = new Label("Localidad:");
-	TextField txtLocalidad = new TextField(20);
+	Frame ventana = new Frame("Alta Cliente");
+	Label lblcliente = new Label("Nombre del Cliente:");
+	TextField txtCliente = new TextField(20);
+	Label lblTelefono = new Label("Teléfono:");
+	TextField txtTelefono = new TextField(20);
 	Button btnAceptar = new Button("Aceptar");
 	Button btnLimpiar = new Button("Limpiar");
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("");
 
-	public AltaSede()
+	public AltaCliente()
 	{
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 200);
 		ventana.setResizable(false);
 		//ventana.setBackground(Color.pink);
-		ventana.add(lblSede);
-		ventana.add(txtSede);
-		ventana.add(lblLocalidad);
-		ventana.add(txtLocalidad);
+		ventana.add(lblcliente);
+		ventana.add(txtCliente);
+		ventana.add(lblTelefono);
+		ventana.add(txtTelefono);
 		btnAceptar.addActionListener(this);
 		ventana.add(btnAceptar);
 		btnLimpiar.addActionListener(this);
@@ -85,9 +85,9 @@ public class AltaSede implements WindowListener, ActionListener
 	{
 		if (actionEvent.getSource().equals(btnLimpiar))
 		{
-			txtSede.setText("");
-			txtLocalidad.setText("");
-			txtSede.requestFocus();
+			txtCliente.setText("");
+			txtTelefono.setText("");
+			txtCliente.requestFocus();
 		}
 		else if (actionEvent.getSource().equals(btnAceptar))
 		{
@@ -95,16 +95,16 @@ public class AltaSede implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 // Hacer el Alta
-			if (!modelo.altaSede(connection, txtSede.getText(), txtLocalidad.getText()))
+			if (!modelo.altaCliente(connection, txtCliente.getText(), txtTelefono.getText()))
 			{
 				mensaje.setText("Error en Alta");
 			}
 			else
 			{
 				mensaje.setText("Alta Correcta");
-				txtSede.setText("");
-				txtLocalidad.setText("");
-				txtSede.requestFocus();
+				txtCliente.setText("");
+				txtTelefono.setText("");
+				txtCliente.requestFocus();
 			}
 			feedback.setVisible(true);
 // Desconectar
@@ -112,4 +112,3 @@ public class AltaSede implements WindowListener, ActionListener
 		}
 	}
 }
-

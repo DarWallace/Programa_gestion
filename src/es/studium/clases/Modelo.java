@@ -190,5 +190,120 @@ public class Modelo
 			return contenidoTextarea;
 			}
 	}
+	public String consultarClientes(Connection conexion)
+	{
+		{
+			String contenidoTextarea = "Código - Nombre - Teléfono\n";
+			sentencia = "SELECT * FROM clientes;";
+			try
+			{
+			statement = conexion.createStatement();
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+			contenidoTextarea = contenidoTextarea
+			+ rs.getInt("idCliente")
+			+ "           - "
+			+ rs.getString("nombreCliente")
+			+ " - "
+			+ rs.getString("telefonoCliente")
+			+ "\n";
+			} 
 
+			}catch (SQLException sqlex)
+
+			{
+				System.out.println("Error en SQL");
+			}
+			return contenidoTextarea;
+			}
+	}
+	public boolean altaCliente(Connection conexion, String nombre, String telefono)
+	{
+		boolean altaCorrecta = false;
+		if (!nombre.isBlank() && !telefono.isBlank())
+		{
+			sentencia = "INSERT INTO Clientes VALUES (null,'" + nombre + "','" + telefono + "');";
+			try
+			{
+				statement = conexion.createStatement();
+				statement.executeUpdate(sentencia);
+				altaCorrecta = true;
+			} catch (SQLException e)
+			{
+				altaCorrecta = false;
+			}
+		}
+		return altaCorrecta;
+	}
+	public boolean bajaCliente(Connection conexion, String idCliente)
+	{
+		boolean resultado = false;
+		sentencia = "DELETE FROM clientes WHERE idCliente = " + idCliente + ";";
+		try
+		{
+			statement = conexion.createStatement();
+			statement.executeUpdate(sentencia);
+			resultado = true;
+		} catch (SQLException sqlex)
+		{
+			resultado = false;
+		}
+		return resultado;
+	}
+	public void rellenarChoiceClientes(Connection conexion, Choice ch)
+	{
+		ch.removeAll();
+		ch.add("Seleccionar un Cliente...");
+		try
+		{
+			statement = conexion.createStatement();
+			sentencia = "SELECT * FROM clientes";
+			rs = statement.executeQuery(sentencia);
+			while (rs.next()){
+				ch.add(rs.getInt("idCliente") + " - " + rs.getString("nombreCliente"));
+			}
+		}catch (SQLException sqlex)
+		{
+			System.out.println("Error sentencia SQL");
+		}
+	}
+	public boolean editarCliente(Connection conexion, String idCliente, String nombre, String telefono)
+	{
+		boolean edicionCorrecta = false;
+		if (!nombre.isBlank() && !telefono.isBlank())
+		{
+			sentencia = "UPDATE clientes SET nombreCliente = '" + nombre + 
+		            "', telefonoCliente = '" + telefono + 
+		            "' WHERE idCliente = " + idCliente + ";";
+			try
+			{
+				statement = conexion.createStatement();
+				statement.executeUpdate(sentencia);
+				edicionCorrecta = true;
+			} catch (SQLException e)
+			{
+				edicionCorrecta = false;
+			}
+		}
+		return edicionCorrecta;
+	}
+	public void mostrarDatosClientes(Connection conexion,String idCliente, 
+			TextField txtNombreCliente, TextField txtLocalidadCliente) {
+		
+		try
+		{
+			statement = conexion.createStatement();
+			sentencia = "SELECT * FROM clientes WHERE idCliente ="+idCliente;
+			rs = statement.executeQuery(sentencia);
+			rs.next();
+			txtNombreCliente.setText(rs.getString("nombreCliente"));
+			txtLocalidadCliente.setText(rs.getString("telefonoCliente"));
+		}catch (SQLException sqlex)
+		{
+			System.out.println("Error  mostrar sentencia SQL");
+		}
+		
+	}
+	
 }

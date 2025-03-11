@@ -14,9 +14,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class BajaSede implements WindowListener, ActionListener
+public class BajaCliente implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Baja Sede");
+	Frame ventana = new Frame("Baja de Clientes");
 	Label nombre = new Label("Nombre:");
 	Choice choice = new Choice();
 
@@ -25,7 +25,7 @@ public class BajaSede implements WindowListener, ActionListener
 	Label msj = new Label("Borrado correcto");
 
 	Dialog confirmacion = new Dialog(ventana, "Mensaje", true);
-	Label pregunta = new Label("Estas seguro de realizar borrar la sede...");
+	Label pregunta = new Label("Estas seguro de realizar borrar al cliente...");
 	Label espacio = new Label("    ");
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
@@ -35,14 +35,14 @@ public class BajaSede implements WindowListener, ActionListener
 	Statement statement = null;
 	ResultSet rs = null;
 
-	public BajaSede()
+	public BajaCliente()
 	{
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 		ventana.setResizable(false);
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
-		modelo.rellenarChoiceSedes(connection, choice);
+		modelo.rellenarChoiceClientes(connection, choice);
 		modelo.desconectar(connection);
 		ventana.add(choice);
 		ventana.add(btnBorrar);
@@ -71,7 +71,6 @@ public class BajaSede implements WindowListener, ActionListener
 		confirmacion.addWindowListener(this);
 		ventana.setVisible(true);
 	}
-
 
 	@Override
 	public void windowOpened(WindowEvent e)
@@ -118,11 +117,12 @@ public class BajaSede implements WindowListener, ActionListener
 	public void windowDeactivated(WindowEvent e)
 	{
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if ((actionEvent.getSource().equals(btnBorrar))
-				&& (!choice.getSelectedItem().equals("Seleccionar un Sede...")))
+				&& (!choice.getSelectedItem().equals("Seleccionar un Cliente...")))
 		{
 			pregunta.setText("¿Quiere borrar " + choice.getSelectedItem() + "?");
 			confirmacion.setVisible(true);
@@ -133,8 +133,8 @@ public class BajaSede implements WindowListener, ActionListener
 		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			String idSede = choice.getSelectedItem().split(" - ")[0];
-			if (!modelo.bajaSede(connection, idSede))
+			String idCliente = choice.getSelectedItem().split(" - ")[0];
+			if (!modelo.bajaCliente(connection, idCliente))
 			{
 //Mostrar feed back correcto
 				msj.setText("Baja incorrecta");
@@ -142,13 +142,13 @@ public class BajaSede implements WindowListener, ActionListener
 			{
 //Mostrar feedback ERROR
 				msj.setText("Baja correcta");
-				modelo.rellenarChoiceSedes(connection, choice);
+				modelo.rellenarChoiceClientes(connection, choice);
 			}
 			feedback.setVisible(true);
 			modelo.desconectar(connection);
 		} else
 		{
-			msj.setText("Elija a un Sede");
+			msj.setText("Elija a un cliente");
 			feedback.setVisible(true);
 		}
 	}
