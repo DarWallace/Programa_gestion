@@ -1,6 +1,7 @@
 package es.studium.clases;
 
 import java.awt.Choice;
+import java.awt.TextField;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -35,37 +36,38 @@ public class Modelo
 		return connection;
 	}
 
-	public void desconectar(Connection connection)
+	public void desconectar(Connection conexion)
 	{
-		if (connection != null)
+		if (conexion != null)
 		{
 			try
 			{
-				connection.close();
+				conexion.close();
 			} catch (SQLException e)
 			{
 			}
 		}
 	}
 
-	public boolean comprobarCredenciales(Connection connection, String usuario, String clave)
+	public int comprobarCredenciales(Connection conexion, String usuario, String clave)
 	{
-		boolean credencialesCorrectas = false;
+		int tipo=-1;
+		
 		sentencia = "SELECT * FROM usuarios " + "WHERE nombreUsuario = '" + usuario + "' AND claveUsuario = SHA2('"
 				+ clave + "', 256);";
 		try
 		{
-			statement = connection.createStatement();
+			statement = conexion.createStatement();
 			rs = statement.executeQuery(sentencia);
 			if (rs.next() == true)
 			{
-				credencialesCorrectas = true;
+				tipo=rs.getInt("tipoUsuario");
 			}
 		} catch (SQLException e)
 		{
 			System.out.println("Error en la sentencia SQL");
 		}
-		return credencialesCorrectas;
+		return tipo;
 	}
 
 	public boolean altaSede(Connection conexion, String nombre, String localidad)
@@ -87,13 +89,13 @@ public class Modelo
 		return altaCorrecta;
 	}
 
-	public boolean bajaSede(Connection connection, String idSede)
+	public boolean bajaSede(Connection conexion, String idSede)
 	{
 		boolean resultado = false;
 		sentencia = "DELETE FROM sedes WHERE idsede = " + idSede + ";";
 		try
 		{
-			statement = connection.createStatement();
+			statement = conexion.createStatement();
 			statement.executeUpdate(sentencia);
 			resultado = true;
 		} catch (SQLException sqlex)
@@ -125,20 +127,68 @@ public class Modelo
 	}
 	
 
-	public void rellenarChoiceSedes(Connection connection, Choice ch)
+	public void rellenarChoiceSedes(Connection conexion, Choice ch)
 	{
 		ch.removeAll();
 		ch.add("Seleccionar un Sede...");
 		try
 		{
-			statement = connection.createStatement();
+			statement = conexion.createStatement();
 			sentencia = "SELECT * FROM sedes";
 			rs = statement.executeQuery(sentencia);
 			while (rs.next()){
 				ch.add(rs.getInt("idSede") + " - " + rs.getString("nombreSede"));
 			}
 		}catch (SQLException sqlex)
-		{}
+		{
+			System.out.println("Error sentencia SQL");
+		}
+	}
+	public void mostrarDatosSedes(Connection conexion,String idSede, 
+			TextField txtNombreSede, TextField txtLocalidadSede) {
+		
+		try
+		{
+			statement = conexion.createStatement();
+			sentencia = "SELECT * FROM sedes WHERE idSede ="+idSede;
+			rs = statement.executeQuery(sentencia);
+			rs.next();
+			txtNombreSede.setText(rs.getString("nombreSede"));
+			txtLocalidadSede.setText(rs.getString("localidadSede"));
+		}catch (SQLException sqlex)
+		{
+			System.out.println("Error  mostrar sentencia SQL");
+		}
+		
+	}
+
+	public String consultarSedes(Connection conexion)
+	{
+		{
+			String contenidoTextarea = "Código - Nombre - Localidad\n";
+			sentencia = "SELECT * FROM sedes;";
+			try
+			{
+			statement = conexion.createStatement();
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+			contenidoTextarea = contenidoTextarea
+			+ rs.getInt("idSede")
+			+ "           - "
+			+ rs.getString("nombreSede")
+			+ " - "
+			+ rs.getString("localidadSede")
+			+ "\n";
+			} 
+
+			}catch (SQLException sqlex)
+
+			{
+				System.out.println("Error en SQL");
+			}
+			return contenidoTextarea;
+			}
 	}
 
 }

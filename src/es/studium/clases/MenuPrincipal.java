@@ -42,15 +42,13 @@ public class MenuPrincipal implements WindowListener, ActionListener
 	MenuItem mniAltaRegistro = new MenuItem("Alta");
 	MenuItem mniBajaRegistro = new MenuItem("Baja");
 	MenuItem mniEditarRegistro = new MenuItem("Edición");
+	int tipo;
+
 	
-
-	public static void main(String[] args)
-	{
-		new MenuPrincipal();
-	}
-	public MenuPrincipal()
+	public MenuPrincipal(int t)
 
 	{
+		tipo=t;
 		ventana.setLayout(new FlowLayout());
 		ventana.addWindowListener(this);
 		ventana.setMenuBar(barraMenu);
@@ -58,37 +56,41 @@ public class MenuPrincipal implements WindowListener, ActionListener
 		mniAltaSede.addActionListener(this);
 		mniBajaSede.addActionListener(this);
 		mniEditarSede.addActionListener(this);
-		mnuSedes.add(mniConsultaSedes);
 		mnuSedes.add(mniAltaSede);
+		if(tipo==1) {
+		mnuSedes.add(mniConsultaSedes);
 		mnuSedes.add(mniBajaSede);
-		mnuSedes.add(mniEditarSede);
+		mnuSedes.add(mniEditarSede); }
 		
 		mniConsultaClientes.addActionListener(this);
 		mniAltaCliente.addActionListener(this);
 		mniBajaCliente.addActionListener(this);
 		mniEditarCliente.addActionListener(this);
-		mnuClientes.add(mniConsultaClientes);
 		mnuClientes.add(mniAltaCliente);
+		if(tipo==1) {
+		mnuClientes.add(mniConsultaClientes);
 		mnuClientes.add(mniBajaCliente);
-		mnuClientes.add(mniEditarCliente);
+		mnuClientes.add(mniEditarCliente);}
 		
 		mniConsultaMaquinas.addActionListener(this);
 		mniAltaMaquina.addActionListener(this);
 		mniBajaMaquina.addActionListener(this);
 		mniEditarMaquina.addActionListener(this);
-		mnuMaquinas.add(mniConsultaMaquinas);
 		mnuMaquinas.add(mniAltaMaquina);
+		if(tipo==1) {
+		mnuMaquinas.add(mniConsultaMaquinas);
 		mnuMaquinas.add(mniBajaMaquina);
-		mnuMaquinas.add(mniEditarMaquina);
+		mnuMaquinas.add(mniEditarMaquina);}
 		
 		mniConsultaRegistros.addActionListener(this);
 		mniAltaRegistro.addActionListener(this);
 		mniBajaRegistro.addActionListener(this);
 		mniEditarRegistro.addActionListener(this);
-		mnuRegistros.add(mniConsultaRegistros);
 		mnuRegistros.add(mniAltaRegistro);
+		if(tipo==1) {
+		mnuRegistros.add(mniConsultaRegistros);
 		mnuRegistros.add(mniBajaRegistro);
-		mnuRegistros.add(mniEditarRegistro);
+		mnuRegistros.add(mniEditarRegistro);}
 		
 		
 		barraMenu.add(mnuSedes);

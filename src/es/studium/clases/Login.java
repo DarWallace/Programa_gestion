@@ -77,21 +77,13 @@ public class Login implements WindowListener, ActionListener
 	}
 
 	public void windowDeactivated(WindowEvent windowEvent)
-	{
-	}
-
+	{	}
 	public void windowDeiconified(WindowEvent windowEvent)
-	{
-	}
-
+	{	}
 	public void windowIconified(WindowEvent windowEvent)
-	{
-	}
-
+	{	}
 	public void windowOpened(WindowEvent windowEvent)
-	{
-	}
-
+	{	}
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if (actionEvent.getSource().equals(btnLimpiar))
@@ -105,7 +97,8 @@ public class Login implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 // Comprobar credenciales
-			if (!modelo.comprobarCredenciales(connection, txtUsuario.getText(), txtClave.getText()))
+			int tipo=modelo.comprobarCredenciales(connection, txtUsuario.getText(), txtClave.getText());
+			if (tipo==-1)
 // Si NO, mostrar feedback
 			{
 				mensaje.setText("Credenciales incorrectas");
@@ -115,7 +108,7 @@ public class Login implements WindowListener, ActionListener
 			else
 			{
 				ventana.setVisible(false);
-				new MenuPrincipal();
+				new MenuPrincipal(tipo);
 			}
 
 		}

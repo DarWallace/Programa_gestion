@@ -13,10 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class EditarSede implements WindowListener, ActionListener
 {
@@ -34,8 +31,6 @@ public class EditarSede implements WindowListener, ActionListener
 
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("cambio correcto");
-
-	
 
 
 	public EditarSede() {
@@ -76,7 +71,7 @@ public class EditarSede implements WindowListener, ActionListener
 		
 		ventana.setVisible(true);
 	}
-
+	
 	
 	public void windowActivated(WindowEvent windowEvent)
 	{
@@ -125,9 +120,18 @@ public class EditarSede implements WindowListener, ActionListener
 
 	public void actionPerformed(ActionEvent actionEvent)
 	{
+		String idSede = choice.getSelectedItem().split(" - ")[0];
 		if(actionEvent.getSource().equals(bAceptar)) 
 		{if (!choice.getSelectedItem().equals("Seleccionar un Sede..."))
-			{cambio.setVisible(true);
+			{
+			
+			Modelo modelo = new Modelo();
+			Connection connection = modelo.conectar();
+			modelo.mostrarDatosSedes(connection, idSede, txtNombreSede, txtLocalidadSede);
+			
+			
+			cambio.setVisible(true);
+			
 			}else {mensaje.setText("Debes elegir un departamento");
 			feedback.setVisible(true);}
 		}
@@ -135,7 +139,8 @@ public class EditarSede implements WindowListener, ActionListener
 		{
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
-		String idSede = choice.getSelectedItem().split(" - ")[0];
+		
+		
 		if (!modelo.editarSede(connection, idSede, txtNombreSede.getText(), txtLocalidadSede.getText()))
 		{
 //Mostrar feed back correcto
@@ -143,62 +148,13 @@ public class EditarSede implements WindowListener, ActionListener
 			
 		}else {
 			mensaje.setText("Cambio realizado");
-			txtNombreSede.setText("");
-			txtLocalidadSede.setText("");
-			txtNombreSede.requestFocus();
-			modelo.rellenarChoiceSedes(connection, choice);
 			
+			modelo.rellenarChoiceSedes(connection, choice);
+			cambio.setVisible(false);
 		}
 		feedback.setVisible(true);
 		modelo.desconectar(connection);
-/*
-// Conectar a la BD
-			try
-			{
-// Cargarloscontroladorespara el acceso a la BD
-				Class.forName(driver);
-// Establecerlaconexiónconla BD Gestión
-				connection = DriverManager.getConnection(url, login, password);
-				System.out.println("Conexión establecida");
-// Crearunasentencia
-				statement = connection.createStatement();
-// Montarlasentencia SQL
-//UPDATE `gestion`.`departamentos` SET `nombreDepartamento` = 'CONTABILIDA' WHERE (`idDepartamento` = '2');
-				String idDepartamento = choDepartamentos.getSelectedItem().split("-")[0];
 
-				sentencia = "UPDATE departamentos SET nombreDepartamento = '" + nombreSede.getText() + 
-				            "', localidadDepartamento = '" + localidadSede.getText() + 
-				            "' WHERE idDepartamento = " + idDepartamento + ";";
-					//	+ localidadDepartamento.getText() + "');"
-// Lanzarlasentencia SQL
-				statement.executeUpdate(sentencia);
-			
-				nombreSede.setText("");
-				localidadSede.setText("");
-				nombreSede.requestFocus();
-// Cerrarconexión
-				try
-				{
-					statement.close();
-					connection.close();
-				} catch (SQLException e)
-				{
-					System.out.println("error al cerrar " + e.toString());
-				}
-			} catch (ClassNotFoundException cnfe)
-			{
-				mensaje.setText("Error 1-" + cnfe.getMessage());
-			} catch (SQLException sqle)
-			{
-				mensaje.setText("Error 2-" + sqle.getMessage());
-			}
-// Feedback
-			mensaje.setText("Alta correcta");
-			feedback.setVisible(true);
-		}else {
-			mensaje.setText("Rellene todos los campos");
-			feedback.setVisible(true);
-		}*/
 	}
 
 	}
