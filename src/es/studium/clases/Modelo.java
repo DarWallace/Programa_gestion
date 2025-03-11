@@ -102,21 +102,43 @@ public class Modelo
 		}
 		return resultado;
 	}
+
+	public boolean editarSede(Connection conexion, String idSede, String nombre, String localidad)
+	{
+		boolean edicionCorrecta = false;
+		if (!nombre.isBlank() && !localidad.isBlank())
+		{
+			sentencia = "UPDATE sedes SET nombreSede = '" + nombre + 
+		            "', localidadSede = '" + localidad + 
+		            "' WHERE idSede = " + idSede + ";";
+			try
+			{
+				statement = conexion.createStatement();
+				statement.executeUpdate(sentencia);
+				edicionCorrecta = true;
+			} catch (SQLException e)
+			{
+				edicionCorrecta = false;
+			}
+		}
+		return edicionCorrecta;
+	}
+	
+
 	public void rellenarChoiceSedes(Connection connection, Choice ch)
 	{
-	ch.removeAll();
-	ch.add("Seleccionar un Sede...");
-	try
-	{
-	statement = connection.createStatement();
-	sentencia = "SELECT * FROM sedes";
-	rs = statement.executeQuery(sentencia);
-	while (rs.next()){
-	ch.add(rs.getInt("idSede") + " - " + rs.getString("nombreSede"));
+		ch.removeAll();
+		ch.add("Seleccionar un Sede...");
+		try
+		{
+			statement = connection.createStatement();
+			sentencia = "SELECT * FROM sedes";
+			rs = statement.executeQuery(sentencia);
+			while (rs.next()){
+				ch.add(rs.getInt("idSede") + " - " + rs.getString("nombreSede"));
+			}
+		}catch (SQLException sqlex)
+		{}
 	}
-	}catch (SQLException sqlex)
-	{}
-	}
-
 
 }

@@ -1,10 +1,13 @@
 package es.studium.clases;
 
+
 import java.awt.FlowLayout;
 import java.awt.Frame;
+
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -39,6 +42,7 @@ public class MenuPrincipal implements WindowListener, ActionListener
 	MenuItem mniAltaRegistro = new MenuItem("Alta");
 	MenuItem mniBajaRegistro = new MenuItem("Baja");
 	MenuItem mniEditarRegistro = new MenuItem("Edición");
+	
 
 	public static void main(String[] args)
 	{
@@ -92,6 +96,9 @@ public class MenuPrincipal implements WindowListener, ActionListener
 		barraMenu.add(mnuMaquinas);
 		barraMenu.add(mnuRegistros);
 		ventana.setSize(350, 200);
+		
+	
+       		
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
 	}

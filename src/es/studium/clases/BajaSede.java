@@ -18,7 +18,7 @@ public class BajaSede implements WindowListener, ActionListener
 {
 	Frame ventana = new Frame("Baja Sede");
 	Label nombre = new Label("Nombre:");
-	Choice ch = new Choice();
+	Choice choice = new Choice();
 
 	Button btnBorrar = new Button("Borrar");
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
@@ -41,9 +41,9 @@ public class BajaSede implements WindowListener, ActionListener
 		ventana.setResizable(false);
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
-		modelo.rellenarChoiceSedes(connection, ch);
+		modelo.rellenarChoiceSedes(connection, choice);
 		modelo.desconectar(connection);
-		ventana.add(ch);
+		ventana.add(choice);
 		ventana.add(btnBorrar);
 		btnBorrar.addActionListener(this);
 		ventana.setLocationRelativeTo(null);
@@ -74,7 +74,7 @@ public class BajaSede implements WindowListener, ActionListener
 	{
 		if (actionEvent.getSource().equals(btnBorrar))
 		{
-			pregunta.setText("¿Quiere borrar " + ch.getSelectedItem() + "?");
+			pregunta.setText("¿Quiere borrar " + choice.getSelectedItem() + "?");
 			confirmacion.setVisible(true);
 		} else if (actionEvent.getSource().equals(btnNo))
 		{
@@ -83,7 +83,7 @@ public class BajaSede implements WindowListener, ActionListener
 		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			String idSede = ch.getSelectedItem().split(" - ")[0];
+			String idSede = choice.getSelectedItem().split(" - ")[0];
 			if (!modelo.bajaSede(connection, idSede))
 			{
 //Mostrar feed back correcto
@@ -92,7 +92,7 @@ public class BajaSede implements WindowListener, ActionListener
 			{
 //Mostrar feedback ERROR
 				msj.setText("Baja correcta");
-				modelo.rellenarChoiceSedes(connection, ch);
+				modelo.rellenarChoiceSedes(connection, choice);
 			}
 			feedback.setVisible(true);
 			modelo.desconectar(connection);
