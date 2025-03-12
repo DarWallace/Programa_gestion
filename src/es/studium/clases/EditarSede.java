@@ -22,7 +22,7 @@ public class EditarSede implements WindowListener, ActionListener
 	Choice choice = new Choice();
 	Button bEditar = new Button("Editar");
 	
-	Dialog cambio = new Dialog(ventana, "Mensaje", true);
+	Dialog cambio = new Dialog(ventana, "Modificación", true);
 	Label lblNombre = new Label("Sede:");
 	TextField txtNombreSede = new TextField(20);
 	Label lblLocalidad = new Label("Localidad:");
@@ -123,7 +123,7 @@ public class EditarSede implements WindowListener, ActionListener
 	{
 		String idSede = choice.getSelectedItem().split(" - ")[0];
 		if(actionEvent.getSource().equals(bEditar)) 
-		{if (!choice.getSelectedItem().equals("Seleccionar un Sede..."))
+		{if (!choice.getSelectedItem().equals("Seleccionar una Sede..."))
 			{
 			
 			Modelo modelo = new Modelo();

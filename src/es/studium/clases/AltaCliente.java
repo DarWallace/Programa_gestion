@@ -31,7 +31,7 @@ public class AltaCliente implements WindowListener, ActionListener
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 200);
 		ventana.setResizable(false);
-		//ventana.setBackground(Color.pink);
+		
 		ventana.add(lblcliente);
 		ventana.add(txtCliente);
 		ventana.add(lblTelefono);
@@ -45,7 +45,6 @@ public class AltaCliente implements WindowListener, ActionListener
 		feedback.setLayout(new FlowLayout());
 		feedback.setSize(280, 100);
 		feedback.setResizable(false);
-		//feedback.setBackground(Color.pink);
 		feedback.add(mensaje);
 		feedback.setLocationRelativeTo(null);
 		feedback.addWindowListener(this);

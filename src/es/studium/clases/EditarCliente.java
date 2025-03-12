@@ -21,7 +21,7 @@ public class EditarCliente implements WindowListener, ActionListener
 	Choice choice = new Choice();
 	Button bEditar = new Button("Editar");
 	
-	Dialog cambio = new Dialog(ventana, "Mensaje", true);
+	Dialog cambio = new Dialog(ventana, "Modificación", true);
 	Label lblNombre = new Label("Cliente:");
 	TextField txtNombreCliente = new TextField(20);
 	Label lblTelefono = new Label("Teléfono:");
@@ -62,7 +62,7 @@ public class EditarCliente implements WindowListener, ActionListener
 		cambio.addWindowListener(this);
 		
 		feedback.setLayout(new FlowLayout());
-		feedback.setSize(500, 100);
+		feedback.setSize(280, 100);
 		feedback.setResizable(false);
 		feedback.add(mensaje);
 		feedback.setLocationRelativeTo(null);

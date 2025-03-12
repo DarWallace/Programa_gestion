@@ -130,7 +130,7 @@ public class Modelo
 	public void rellenarChoiceSedes(Connection conexion, Choice ch)
 	{
 		ch.removeAll();
-		ch.add("Seleccionar un Sede...");
+		ch.add("Seleccionar una Sede...");
 		try
 		{
 			statement = conexion.createStatement();

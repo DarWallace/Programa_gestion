@@ -1,5 +1,7 @@
 package es.studium.clases;
 
+import java.awt.Button;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,36 +14,26 @@ import java.sql.Connection;
 
 public class ConsultaSedes implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Consulta Sedes");
-	TextArea txtArea = new TextArea();
+	Frame ventana = new Frame("Consulta de Sedes");
+	TextArea txtArea = new TextArea(10,40);
 	Modelo modelo = new Modelo();
-	Connection connection = null;
+	Button exportar= new Button("Exportar a PDF");
+	
 	public ConsultaSedes()
 	{
-		ventana.setLayout(new GridBagLayout());
-// Añadircomponentes
-		GridBagConstraints constraints = new GridBagConstraints();
-// El áreadetextoempiezaenlacolumnacero.
-		constraints.gridx = 0;
-// El áreadetextoempiezaenlafilacero
-		constraints.gridy = 0;
-// El áreadetextoocupadoscolumnas.
-		constraints.gridwidth = 2;
-// El áreadetextoocupa 2 filas.
-		constraints.gridheight = 2;
-		constraints.fill = GridBagConstraints.BOTH;
-// Lafila 0 debeestirarse, leponemosun 1.0
-		constraints.weighty = 1.0;
-		connection = modelo.conectar();
+		ventana.setLayout(new FlowLayout());
+
+		Connection connection = modelo.conectar();
 		txtArea.append(modelo.consultarSedes(connection));
 		modelo.desconectar(connection);
-		ventana.add(txtArea, constraints);
-//Restauramosal valor pordefecto, para no afectar a los
-//siguientescomponentes.
-		constraints.weighty = 0.0;
+		ventana.add(txtArea);
+
+		ventana.add(exportar);
+		exportar.addActionListener(this);
 		ventana.setLocationRelativeTo(null);
 		ventana.addWindowListener(this);
-		ventana.setSize(550, 250);
+		ventana.setSize(400, 250);
+		ventana.setResizable(false);
 		ventana.setVisible(true);
 	}
 	

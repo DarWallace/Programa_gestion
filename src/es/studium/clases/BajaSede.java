@@ -31,10 +31,6 @@ public class BajaSede implements WindowListener, ActionListener
 	Button btnNo = new Button(" No ");
 	String sentencia = "";
 
-	Connection connection = null;
-	Statement statement = null;
-	ResultSet rs = null;
-
 	public BajaSede()
 	{
 		ventana.setLayout(new FlowLayout());
@@ -122,7 +118,7 @@ public class BajaSede implements WindowListener, ActionListener
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if ((actionEvent.getSource().equals(btnBorrar))
-				&& (!choice.getSelectedItem().equals("Seleccionar un Sede...")))
+				&& (!choice.getSelectedItem().equals("Seleccionar una Sede...")))
 		{
 			pregunta.setText("¿Quiere borrar " + choice.getSelectedItem() + "?");
 			confirmacion.setVisible(true);
@@ -148,7 +144,7 @@ public class BajaSede implements WindowListener, ActionListener
 			modelo.desconectar(connection);
 		} else
 		{
-			msj.setText("Elija a un Sede");
+			msj.setText("Elija una Sede");
 			feedback.setVisible(true);
 		}
 	}

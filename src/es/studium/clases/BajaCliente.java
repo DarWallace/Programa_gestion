@@ -30,11 +30,7 @@ public class BajaCliente implements WindowListener, ActionListener
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
 	String sentencia = "";
-
-	Connection connection = null;
-	Statement statement = null;
-	ResultSet rs = null;
-
+	
 	public BajaCliente()
 	{
 		ventana.setLayout(new FlowLayout());
