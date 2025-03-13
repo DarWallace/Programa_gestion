@@ -96,10 +96,12 @@ public class AltaCliente implements WindowListener, ActionListener
 // Hacer el Alta
 			if (!modelo.altaCliente(connection, txtCliente.getText(), txtTelefono.getText()))
 			{
+// Mensaje de error 
 				mensaje.setText("Error en Alta");
 			}
 			else
 			{
+// mensaje aceptación y borrado de los text
 				mensaje.setText("Alta Correcta");
 				txtCliente.setText("");
 				txtTelefono.setText("");

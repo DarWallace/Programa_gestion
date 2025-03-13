@@ -143,10 +143,11 @@ public class EditarCliente implements WindowListener, ActionListener
 		
 		if (!modelo.editarCliente(connection, idCliente, txtNombreCliente.getText(), txtTelefonoCliente.getText()))
 		{
-//Mostrar feed back correcto
+//Mostrar feed back incorrecto
 			mensaje.setText("Error en el cambio");
 			
 		}else {
+//Mostrar feed back correcto
 			mensaje.setText("Cambio realizado");
 			
 			modelo.rellenarChoiceClientes(connection, choice);

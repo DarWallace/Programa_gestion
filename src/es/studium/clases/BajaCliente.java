@@ -11,8 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 
 public class BajaCliente implements WindowListener, ActionListener
 {
@@ -132,11 +131,11 @@ public class BajaCliente implements WindowListener, ActionListener
 			String idCliente = choice.getSelectedItem().split(" - ")[0];
 			if (!modelo.bajaCliente(connection, idCliente))
 			{
-//Mostrar feed back correcto
+//Mostrar feed back incorrecto
 				msj.setText("Baja incorrecta");
 			} else
 			{
-//Mostrar feedback ERROR
+//Mostrar feedback correcto
 				msj.setText("Baja correcta");
 				modelo.rellenarChoiceClientes(connection, choice);
 			}

@@ -1,6 +1,5 @@
 package es.studium.clases;
 
-
 import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Dialog;
@@ -14,14 +13,13 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
 
-
 public class EditarSede implements WindowListener, ActionListener
 {
 	Frame ventana = new Frame("Editar Sede");
-	Label lblEleccion =new Label("Elegir una Sede");
+	Label lblEleccion = new Label("Elegir una Sede");
 	Choice choice = new Choice();
 	Button bEditar = new Button("Editar");
-	
+
 	Dialog cambio = new Dialog(ventana, "Modificación", true);
 	Label lblNombre = new Label("Sede:");
 	TextField txtNombreSede = new TextField(20);
@@ -32,9 +30,9 @@ public class EditarSede implements WindowListener, ActionListener
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("cambio correcto");
 
+	public EditarSede()
+	{
 
-	public EditarSede() {
-		
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 
@@ -44,7 +42,7 @@ public class EditarSede implements WindowListener, ActionListener
 		modelo.rellenarChoiceSedes(connection, choice);
 		modelo.desconectar(connection);
 		ventana.add(choice);
-		
+
 		bEditar.addActionListener(this);
 		ventana.add(bEditar);
 		ventana.setLocationRelativeTo(null);
@@ -61,7 +59,7 @@ public class EditarSede implements WindowListener, ActionListener
 		cambio.add(bAceptar);
 		cambio.setLocationRelativeTo(null);
 		cambio.addWindowListener(this);
-		
+
 		feedback.setLayout(new FlowLayout());
 		feedback.setSize(280, 100);
 		feedback.setResizable(false);
@@ -69,11 +67,9 @@ public class EditarSede implements WindowListener, ActionListener
 		feedback.setLocationRelativeTo(null);
 		feedback.addWindowListener(this);
 
-		
 		ventana.setVisible(true);
 	}
-	
-	
+
 	public void windowActivated(WindowEvent windowEvent)
 	{
 	}
@@ -96,7 +92,7 @@ public class EditarSede implements WindowListener, ActionListener
 			cambio.setVisible(false);
 
 		}
-		
+
 		else if (windowEvent.getSource().equals(ventana))
 		{
 			ventana.setVisible(false);
@@ -122,42 +118,44 @@ public class EditarSede implements WindowListener, ActionListener
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		String idSede = choice.getSelectedItem().split(" - ")[0];
-		if(actionEvent.getSource().equals(bEditar)) 
-		{if (!choice.getSelectedItem().equals("Seleccionar una Sede..."))
+		if (actionEvent.getSource().equals(bEditar))
+		{
+			if (!choice.getSelectedItem().equals("Seleccionar una Sede..."))
 			{
-			
+
+				Modelo modelo = new Modelo();
+				Connection connection = modelo.conectar();
+				modelo.mostrarDatosSedes(connection, idSede, txtNombreSede, txtLocalidadSede);
+
+				cambio.setVisible(true);
+
+			} else
+			{
+				mensaje.setText("Debes elegir una Sede");
+				feedback.setVisible(true);
+			}
+		} else if (actionEvent.getSource().equals(bAceptar))
+		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			modelo.mostrarDatosSedes(connection, idSede, txtNombreSede, txtLocalidadSede);
-			
-			
-			cambio.setVisible(true);
-			
-			}else {mensaje.setText("Debes elegir una Sede");
-			feedback.setVisible(true);}
-		}
-	else if (actionEvent.getSource().equals(bAceptar))
-		{
-		Modelo modelo = new Modelo();
-		Connection connection = modelo.conectar();
-		
-		
-		if (!modelo.editarSede(connection, idSede, txtNombreSede.getText(), txtLocalidadSede.getText()))
-		{
-//Mostrar feed back correcto
-			mensaje.setText("Error en el cambio");
-			
-		}else {
-			mensaje.setText("Cambio realizado");
-			
-			modelo.rellenarChoiceSedes(connection, choice);
-			cambio.setVisible(false);
-		}
-		feedback.setVisible(true);
-		modelo.desconectar(connection);
 
-	}
+			if (!modelo.editarSede(connection, idSede, txtNombreSede.getText(), txtLocalidadSede.getText()))
+			{
+//Mostrar feed back incorrecto
+				mensaje.setText("Error en el cambio");
+
+			} else
+			{
+// Mostrar feed back correcto
+				mensaje.setText("Cambio realizado");
+
+				modelo.rellenarChoiceSedes(connection, choice);
+				cambio.setVisible(false);
+			}
+			feedback.setVisible(true);
+			modelo.desconectar(connection);
+
+		}
 
 	}
 }
-
