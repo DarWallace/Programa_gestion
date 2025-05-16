@@ -2,20 +2,26 @@ package es.studium.clases;
 
 import java.awt.FlowLayout;
 import java.awt.Frame;
-
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
-
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class MenuPrincipal implements WindowListener, ActionListener
+public class MenuPrincipal extends Frame implements WindowListener, ActionListener
 
 {
-	Frame ventana = new Frame("Menú Principal");
+	private static final long serialVersionUID = 1L;
+	// Declarar el objeto Image
+	Image imagenFondo;
+	// Declarar el objeto Toolkit para manejo de imágenes
+	Toolkit herramienta;
+
 	MenuBar barraMenu = new MenuBar();
 	Menu mnuSedes = new Menu("Sedes");
 	Menu mnuClientes = new Menu("Clientes");
@@ -47,9 +53,15 @@ public class MenuPrincipal implements WindowListener, ActionListener
 
 	{
 		tipo = t;
-		ventana.setLayout(new FlowLayout());
-		ventana.addWindowListener(this);
-		ventana.setMenuBar(barraMenu);
+		setTitle("Menú Principal");
+		setLayout(new FlowLayout());
+		addWindowListener(this);
+		// Establecer el método de trabajo con imágenes
+		herramienta = getToolkit();
+		// Especificar la ruta de la imagen
+		// Si ponemos ruta OJO con los \\
+		imagenFondo = herramienta.getImage("img\\imprenta2.jpg");
+		setMenuBar(barraMenu);
 		mniConsultaSedes.addActionListener(this);
 		mniAltaSede.addActionListener(this);
 		mniBajaSede.addActionListener(this);
@@ -102,12 +114,22 @@ public class MenuPrincipal implements WindowListener, ActionListener
 		barraMenu.add(mnuClientes);
 		barraMenu.add(mnuMaquinas);
 		barraMenu.add(mnuRegistros);
-		ventana.setSize(350, 200);
+		setSize(310, 227);
 
-		ventana.setLocationRelativeTo(null);
-		ventana.setVisible(true);
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 
+	public static void main(String[] args)
+	{
+		new MenuPrincipal(1);
+	}
+
+	public void paint(Graphics g)
+	{
+		// Dibujar la imagen
+		g.drawImage(imagenFondo, 7, 50, this);
+	}
 
 	public void windowActivated(WindowEvent windowEvent)
 	{
@@ -167,14 +189,21 @@ public class MenuPrincipal implements WindowListener, ActionListener
 		{
 			new EditarCliente();
 		}
+
+		else if (actionEvent.getSource().equals(mniConsultaMaquinas))
+		{
+			new ConsultaMaquinas();
+		} else if (actionEvent.getSource().equals(mniAltaMaquina))
+		{
+			new AltaMaquina();
+		} else if (actionEvent.getSource().equals(mniBajaMaquina))
+		{
+			new BajaMaquina();
+		} else if (actionEvent.getSource().equals(mniEditarMaquina))
+		{
+			new EditarMaquina();
+		}
 		/*
-		 * else if (actionEvent.getSource().equals(mniConsultaMaquinas)) { new
-		 * ConsultaMaquinas(); }else if (actionEvent.getSource().equals(mniAltaMaquina))
-		 * { new AltaMaquina(); }else if
-		 * (actionEvent.getSource().equals(mniBajaMaquina)) { new BajaMaquina(); }else
-		 * if (actionEvent.getSource().equals(mniEditarMaquina)) { new EditarMaquina();
-		 * }
-		 * 
 		 * else if (actionEvent.getSource().equals(mniConsultaRegistros)) { new
 		 * ConsultaRegistros(); }else if
 		 * (actionEvent.getSource().equals(mniAltaRegistro)) { new AltaRegistro(); }else

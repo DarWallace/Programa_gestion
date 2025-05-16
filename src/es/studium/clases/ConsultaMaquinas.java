@@ -13,32 +13,31 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
 
-public class ConsultaClientes implements WindowListener, ActionListener
+public class ConsultaMaquinas implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Consulta de Clientes");
-	TextArea txtArea = new TextArea(10, 40);
-	Button exportar = new Button("Exportar a PDF");
+	Frame ventana = new Frame("Consulta de Maquinas");
+	TextArea txtArea = new TextArea(10,45);
+	 
 	Modelo modelo = new Modelo();
+	Button exportar= new Button("Exportar a PDF");
 	Dialog feedback = new Dialog(ventana, "Datos exportados", true);
 	Label mensaje = new Label("");
-
-	
-	public static final String DEST = "Clientes.pdf";
-
-	public ConsultaClientes()
+	public static final String DEST = "Maquinas.pdf";
+	public ConsultaMaquinas()
 	{
 		ventana.setLayout(new FlowLayout());
+
 		Connection connection = modelo.conectar();
-		txtArea.append(modelo.consultarClientes(connection));
+		txtArea.append(modelo.consultarMaquinas(connection));
+		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); 
 		modelo.desconectar(connection);
 		ventana.add(txtArea);
-		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); 
 
 		ventana.add(exportar);
 		exportar.addActionListener(this);
 		ventana.setLocationRelativeTo(null);
 		ventana.addWindowListener(this);
-		ventana.setSize(400, 250);
+		ventana.setSize(450, 250);
 		ventana.setResizable(false);
 		ventana.setVisible(true);
 		
@@ -49,28 +48,25 @@ public class ConsultaClientes implements WindowListener, ActionListener
 		feedback.setLocationRelativeTo(null);
 		feedback.addWindowListener(this);
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
-	{
+	{	
 		if (actionEvent.getSource().equals(exportar))
 		{
 			// Conectarse a la BD
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			System.out.println(txtArea.getText());
-			modelo.ImprimirClientes(DEST, txtArea.getText());
+			modelo.ImprimirMaquinas(DEST, txtArea.getText());
 			feedback.setVisible(true);
 			// Desconectar
 			modelo.desconectar(connection);
 		}
 	}
-
 	@Override
 	public void windowOpened(WindowEvent e)
-	{
-	}
-
+	{	}
 	@Override
 	public void windowClosing(WindowEvent e)
 	{
@@ -83,30 +79,21 @@ public class ConsultaClientes implements WindowListener, ActionListener
 			ventana.setVisible(false);
 		}
 	}
-
 	@Override
 	public void windowClosed(WindowEvent e)
-	{
-	}
-
+	{	}
 	@Override
 	public void windowIconified(WindowEvent e)
-	{
-	}
-
+	{	}
 	@Override
 	public void windowDeiconified(WindowEvent e)
-	{
-	}
-
+	{	}
 	@Override
 	public void windowActivated(WindowEvent e)
-	{
-	}
-
+	{	}
 	@Override
 	public void windowDeactivated(WindowEvent e)
-	{
-	}
+	{	}
 
 }
+

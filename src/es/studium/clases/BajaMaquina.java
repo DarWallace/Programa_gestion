@@ -13,9 +13,9 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 
 
-public class BajaSede implements WindowListener, ActionListener
+public class BajaMaquina implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Baja Sede");
+	Frame ventana = new Frame("Baja Maquina");
 	Label nombre = new Label("Nombre:");
 	Choice choice = new Choice();
 
@@ -24,20 +24,20 @@ public class BajaSede implements WindowListener, ActionListener
 	Label msj = new Label("Borrado correcto");
 
 	Dialog confirmacion = new Dialog(ventana, "Mensaje", true);
-	Label pregunta = new Label("Estas seguro de realizar borrar la sede...");
+	Label pregunta = new Label("Estas seguro de realizar borrar la maquina...");
 	Label espacio = new Label("    ");
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
 	String sentencia = "";
 
-	public BajaSede()
+	public BajaMaquina()
 	{
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 		ventana.setResizable(false);
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
-		modelo.rellenarChoiceSedes(connection, choice);
+		modelo.rellenarChoiceMaquinas(connection, choice);
 		modelo.desconectar(connection);
 		ventana.add(choice);
 		ventana.add(btnBorrar);
@@ -47,7 +47,7 @@ public class BajaSede implements WindowListener, ActionListener
 		ventana.setVisible(true);
 
 		feedback.setLayout(new FlowLayout());
-		feedback.setSize(310, 100);
+		feedback.setSize(280, 100);
 		feedback.setResizable(false);
 		feedback.add(msj);
 		feedback.addWindowListener(this);
@@ -117,7 +117,7 @@ public class BajaSede implements WindowListener, ActionListener
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if ((actionEvent.getSource().equals(btnBorrar))
-				&& (!choice.getSelectedItem().equals("Seleccionar una Sede...")))
+				&& (!choice.getSelectedItem().equals("Seleccionar una Maquina...")))
 		{
 			pregunta.setText("¿Quiere borrar " + choice.getSelectedItem() + "?");
 			confirmacion.setVisible(true);
@@ -128,22 +128,22 @@ public class BajaSede implements WindowListener, ActionListener
 		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			String idSede = choice.getSelectedItem().split(" - ")[0];
-			if (!modelo.bajaSede(connection, idSede))
+			String idMaquina = choice.getSelectedItem().split(" - ")[0];
+			if (!modelo.bajaMaquina(connection, idMaquina))
 			{
 //Mostrar feed back incorrecto
-				msj.setText("Baja incorrecta. Esta Sede puede contener Máquinas!");
+				msj.setText("Baja incorrecta");
 			} else
 			{
 //Mostrar feedback correcto
 				msj.setText("Baja correcta");
-				modelo.rellenarChoiceSedes(connection, choice);
+				modelo.rellenarChoiceMaquinas(connection, choice);
 			}
 			feedback.setVisible(true);
 			modelo.desconectar(connection);
 		} else
 		{
-			msj.setText("Elija una Sede");
+			msj.setText("Elija una Maquina");
 			feedback.setVisible(true);
 		}
 	}
