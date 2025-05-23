@@ -13,10 +13,10 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 
 
-public class BajaCliente implements WindowListener, ActionListener
+public class BajaRegistro implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Baja de Clientes");
-	Label nombre = new Label("Nombre:");
+	Frame ventana = new Frame("Baja Registro");
+	Label nombre = new Label("Registro:");
 	Choice choice = new Choice();
 
 	Button btnBorrar = new Button("Borrar");
@@ -24,21 +24,21 @@ public class BajaCliente implements WindowListener, ActionListener
 	Label msj = new Label("Borrado correcto");
 
 	Dialog confirmacion = new Dialog(ventana, "Mensaje", true);
-	Label pregunta = new Label("Estas seguro de realizar borrar al cliente...");
+	Label pregunta = new Label("Estas seguro de realizar borrar el Registro...");
 	Label espacio = new Label("    ");
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
-	
 	String usuario;
-	public BajaCliente(String u)
+
+	public BajaRegistro(String u)
 	{
 		usuario=u;
 		ventana.setLayout(new FlowLayout());
-		ventana.setSize(240, 200);
+		ventana.setSize(300, 200);
 		ventana.setResizable(false);
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
-		modelo.rellenarChoiceClientes(connection, choice);
+		modelo.rellenarChoiceRegistros(connection, choice);
 		modelo.desconectar(connection);
 		ventana.add(choice);
 		ventana.add(btnBorrar);
@@ -55,7 +55,7 @@ public class BajaCliente implements WindowListener, ActionListener
 		feedback.setLocationRelativeTo(null);
 
 		confirmacion.setLayout(new FlowLayout());
-		confirmacion.setSize(210, 100);
+		confirmacion.setSize(350, 100);
 		confirmacion.setResizable(false);
 		confirmacion.add(pregunta);
 		confirmacion.add(espacio);
@@ -67,6 +67,7 @@ public class BajaCliente implements WindowListener, ActionListener
 		confirmacion.addWindowListener(this);
 		ventana.setVisible(true);
 	}
+
 
 	@Override
 	public void windowOpened(WindowEvent e)
@@ -113,12 +114,11 @@ public class BajaCliente implements WindowListener, ActionListener
 	public void windowDeactivated(WindowEvent e)
 	{
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if ((actionEvent.getSource().equals(btnBorrar))
-				&& (!choice.getSelectedItem().equals("Seleccionar un Cliente...")))
+				&& (!choice.getSelectedItem().equals("Seleccionar un Registro...")))
 		{
 			pregunta.setText("¿Quiere borrar " + choice.getSelectedItem() + "?");
 			confirmacion.setVisible(true);
@@ -129,8 +129,8 @@ public class BajaCliente implements WindowListener, ActionListener
 		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			String idCliente = choice.getSelectedItem().split(" - ")[0];
-			if (!modelo.bajaCliente(connection, idCliente, usuario))
+			String idRegistro = choice.getSelectedItem().split(" - ")[0];
+			if (!modelo.bajaRegistro(connection, idRegistro,usuario))
 			{
 //Mostrar feed back incorrecto
 				msj.setText("Baja incorrecta");
@@ -138,13 +138,13 @@ public class BajaCliente implements WindowListener, ActionListener
 			{
 //Mostrar feedback correcto
 				msj.setText("Baja correcta");
-				modelo.rellenarChoiceClientes(connection, choice);
+				modelo.rellenarChoiceRegistros(connection, choice);
 			}
 			feedback.setVisible(true);
 			modelo.desconectar(connection);
 		} else
 		{
-			msj.setText("Elija a un cliente");
+			msj.setText("Elija un Registro");
 			feedback.setVisible(true);
 		}
 	}

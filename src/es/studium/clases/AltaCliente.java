@@ -25,9 +25,11 @@ public class AltaCliente implements WindowListener, ActionListener
 	Button btnLimpiar = new Button("Limpiar");
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("");
+	String usuario;
 
-	public AltaCliente()
+	public AltaCliente(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 200);
 		ventana.setResizable(false);
@@ -94,7 +96,7 @@ public class AltaCliente implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 // Hacer el Alta
-			if (!modelo.altaCliente(connection, txtCliente.getText(), txtTelefono.getText()))
+			if (!modelo.altaCliente(connection, txtCliente.getText(), txtTelefono.getText(), usuario))
 			{
 // Mensaje de error 
 				mensaje.setText("Error en Alta");

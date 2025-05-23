@@ -30,10 +30,11 @@ public class EditarCliente implements WindowListener, ActionListener
 
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("cambio correcto");
+	String usuario;
 
-
-	public EditarCliente() {
-		
+	public EditarCliente(String u) 
+	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 
@@ -127,7 +128,7 @@ public class EditarCliente implements WindowListener, ActionListener
 			
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			modelo.mostrarDatosClientes(connection, idCliente, txtNombreCliente, txtTelefonoCliente);
+			modelo.mostrarDatosClientes(connection, idCliente, txtNombreCliente, txtTelefonoCliente, usuario);
 			
 			
 			cambio.setVisible(true);
@@ -141,7 +142,7 @@ public class EditarCliente implements WindowListener, ActionListener
 		Connection connection = modelo.conectar();
 		
 		
-		if (!modelo.editarCliente(connection, idCliente, txtNombreCliente.getText(), txtTelefonoCliente.getText()))
+		if (!modelo.editarCliente(connection, idCliente, txtNombreCliente.getText(), txtTelefonoCliente.getText(), usuario))
 		{
 //Mostrar feed back incorrecto
 			mensaje.setText("Error en el cambio");

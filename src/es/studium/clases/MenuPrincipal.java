@@ -48,10 +48,12 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 	MenuItem mniBajaRegistro = new MenuItem("Baja");
 	MenuItem mniEditarRegistro = new MenuItem("Edición");
 	int tipo;
+	String usuario;
 
-	public MenuPrincipal(int t)
+	public MenuPrincipal(int t, String u)
 
 	{
+		usuario=u;
 		tipo = t;
 		setTitle("Menú Principal");
 		setLayout(new FlowLayout());
@@ -120,10 +122,10 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 		setVisible(true);
 	}
 
-	public static void main(String[] args)
-	{
-		new MenuPrincipal(1);
-	}
+//	public static void main(String[] args)
+//	{
+//		new MenuPrincipal(1, "Juan");
+//	}
 
 	public void paint(Graphics g)
 	{
@@ -164,53 +166,59 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 	{
 		if (actionEvent.getSource().equals(mniConsultaSedes))
 		{
-			new ConsultaSedes();
+			new ConsultaSedes(usuario);
 		} else if (actionEvent.getSource().equals(mniAltaSede))
 		{
-			new AltaSede();
+			new AltaSede(usuario);
 		} else if (actionEvent.getSource().equals(mniBajaSede))
 		{
-			new BajaSede();
+			new BajaSede(usuario);
 		} else if (actionEvent.getSource().equals(mniEditarSede))
 		{
-			new EditarSede();
+			new EditarSede(usuario);
 		}
 
 		else if (actionEvent.getSource().equals(mniConsultaClientes))
 		{
-			new ConsultaClientes();
+			new ConsultaClientes(usuario);
 		} else if (actionEvent.getSource().equals(mniAltaCliente))
 		{
-			new AltaCliente();
+			new AltaCliente(usuario);
 		} else if (actionEvent.getSource().equals(mniBajaCliente))
 		{
-			new BajaCliente();
+			new BajaCliente(usuario);
 		} else if (actionEvent.getSource().equals(mniEditarCliente))
 		{
-			new EditarCliente();
+			new EditarCliente(usuario);
 		}
 
 		else if (actionEvent.getSource().equals(mniConsultaMaquinas))
 		{
-			new ConsultaMaquinas();
+			new ConsultaMaquinas(usuario);
 		} else if (actionEvent.getSource().equals(mniAltaMaquina))
 		{
-			new AltaMaquina();
+			new AltaMaquina(usuario);
 		} else if (actionEvent.getSource().equals(mniBajaMaquina))
 		{
-			new BajaMaquina();
+			new BajaMaquina(usuario);
 		} else if (actionEvent.getSource().equals(mniEditarMaquina))
 		{
-			new EditarMaquina();
+			new EditarMaquina(usuario);
 		}
-		/*
-		 * else if (actionEvent.getSource().equals(mniConsultaRegistros)) { new
-		 * ConsultaRegistros(); }else if
-		 * (actionEvent.getSource().equals(mniAltaRegistro)) { new AltaRegistro(); }else
-		 * if (actionEvent.getSource().equals(mniBajaRegistro)) { new BajaRegistro();
-		 * }else if (actionEvent.getSource().equals(mniEditarRegistro)) { new
-		 * EditarRegistro(); }
-		 */
+
+		else if (actionEvent.getSource().equals(mniConsultaRegistros))
+		{
+			new ConsultaRegistros(usuario);
+		} else if (actionEvent.getSource().equals(mniAltaRegistro))
+		{
+			new AltaRegistro(usuario);
+		} else if (actionEvent.getSource().equals(mniBajaRegistro))
+		{
+			new BajaRegistro(usuario);
+		} else if (actionEvent.getSource().equals(mniEditarRegistro))
+		{
+			new EditarRegistro(usuario);
+		}
 
 	}
 

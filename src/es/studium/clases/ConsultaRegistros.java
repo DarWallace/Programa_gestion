@@ -13,33 +13,33 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
 
-public class ConsultaSedes implements WindowListener, ActionListener
+public class ConsultaRegistros implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Consulta de Sedes");
-	TextArea txtArea = new TextArea(10,40);
+	Frame ventana = new Frame("Consulta de Registros");
+	TextArea txtArea = new TextArea(10,45);
+	 
 	Modelo modelo = new Modelo();
 	Button exportar= new Button("Exportar a PDF");
 	Dialog feedback = new Dialog(ventana, "Datos exportados", true);
 	Label mensaje = new Label("");
+	public static final String DEST = "Registros.pdf";
 	String usuario;
-	public static final String DEST = "Sedes.pdf";
-	
-	public ConsultaSedes(String u)
+	public ConsultaRegistros(String u)
 	{
 		usuario=u;
 		ventana.setLayout(new FlowLayout());
 
 		Connection connection = modelo.conectar();
-		txtArea.append(modelo.consultarSedes(connection, usuario));
+		txtArea.append(modelo.consultarRegistros(connection,usuario));
+		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); 
 		modelo.desconectar(connection);
-		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		ventana.add(txtArea);
 
 		ventana.add(exportar);
 		exportar.addActionListener(this);
 		ventana.setLocationRelativeTo(null);
 		ventana.addWindowListener(this);
-		ventana.setSize(400, 250);
+		ventana.setSize(450, 250);
 		ventana.setResizable(false);
 		ventana.setVisible(true);
 		
@@ -60,7 +60,7 @@ public class ConsultaSedes implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			System.out.println(txtArea.getText());
-			modelo.ImprimirSedes(DEST, txtArea.getText(), usuario);
+			modelo.ImprimirRegistros(DEST, txtArea.getText(), usuario);
 			feedback.setVisible(true);
 			// Desconectar
 			modelo.desconectar(connection);
@@ -72,6 +72,7 @@ public class ConsultaSedes implements WindowListener, ActionListener
 	@Override
 	public void windowClosing(WindowEvent e)
 	{
+
 		if (e.getSource().equals(feedback))
 		{
 			feedback.setVisible(false);
@@ -97,3 +98,5 @@ public class ConsultaSedes implements WindowListener, ActionListener
 	{	}
 
 }
+
+

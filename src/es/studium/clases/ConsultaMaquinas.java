@@ -23,12 +23,14 @@ public class ConsultaMaquinas implements WindowListener, ActionListener
 	Dialog feedback = new Dialog(ventana, "Datos exportados", true);
 	Label mensaje = new Label("");
 	public static final String DEST = "Maquinas.pdf";
-	public ConsultaMaquinas()
+	String usuario;
+	public ConsultaMaquinas(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 
 		Connection connection = modelo.conectar();
-		txtArea.append(modelo.consultarMaquinas(connection));
+		txtArea.append(modelo.consultarMaquinas(connection,usuario));
 		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); 
 		modelo.desconectar(connection);
 		ventana.add(txtArea);
@@ -58,7 +60,7 @@ public class ConsultaMaquinas implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			System.out.println(txtArea.getText());
-			modelo.ImprimirMaquinas(DEST, txtArea.getText());
+			modelo.ImprimirMaquinas(DEST, txtArea.getText(), usuario);
 			feedback.setVisible(true);
 			// Desconectar
 			modelo.desconectar(connection);

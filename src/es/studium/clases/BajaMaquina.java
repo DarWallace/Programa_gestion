@@ -28,10 +28,11 @@ public class BajaMaquina implements WindowListener, ActionListener
 	Label espacio = new Label("    ");
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
-	String sentencia = "";
+	String usuario;
 
-	public BajaMaquina()
+	public BajaMaquina(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 		ventana.setResizable(false);
@@ -129,7 +130,7 @@ public class BajaMaquina implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			String idMaquina = choice.getSelectedItem().split(" - ")[0];
-			if (!modelo.bajaMaquina(connection, idMaquina))
+			if (!modelo.bajaMaquina(connection, idMaquina,usuario))
 			{
 //Mostrar feed back incorrecto
 				msj.setText("Baja incorrecta");

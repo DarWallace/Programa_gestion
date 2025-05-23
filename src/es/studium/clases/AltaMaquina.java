@@ -26,9 +26,11 @@ public class AltaMaquina implements WindowListener, ActionListener
 	Button btnLimpiar = new Button("Limpiar");
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("");
+	String usuario;
 
-	public AltaMaquina()
+	public AltaMaquina(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 250);
 		ventana.setResizable(false);
@@ -103,6 +105,7 @@ public class AltaMaquina implements WindowListener, ActionListener
 			txtMaquina.setText("");
 			txtPrecio.setText("");
 			txtMaquina.requestFocus();
+			choice.select(0);
 		} else if (actionEvent.getSource().equals(btnAceptar))
 		{
 			// Conectarse a la BD
@@ -112,7 +115,7 @@ public class AltaMaquina implements WindowListener, ActionListener
 			{
 
 // Hacer el Alta
-				if (!modelo.altaMaquina(connection, txtMaquina.getText(), txtPrecio.getText(), idSede))
+				if (!modelo.altaMaquina(connection, txtMaquina.getText(), txtPrecio.getText(), idSede, usuario))
 				{
 					mensaje.setText("Error en Alta");
 				} else
@@ -120,7 +123,9 @@ public class AltaMaquina implements WindowListener, ActionListener
 					mensaje.setText("Alta Correcta");
 					txtMaquina.setText("");
 					txtPrecio.setText("");
+					choice.select(0);
 					txtMaquina.requestFocus();
+					
 				}
 
 			} else

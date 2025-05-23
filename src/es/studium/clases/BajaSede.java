@@ -29,9 +29,10 @@ public class BajaSede implements WindowListener, ActionListener
 	Button btnSi = new Button(" Sí ");
 	Button btnNo = new Button(" No ");
 	String sentencia = "";
-
-	public BajaSede()
+	String usuario;
+	public BajaSede(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 		ventana.setResizable(false);
@@ -129,7 +130,7 @@ public class BajaSede implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			String idSede = choice.getSelectedItem().split(" - ")[0];
-			if (!modelo.bajaSede(connection, idSede))
+			if (!modelo.bajaSede(connection, idSede, usuario))
 			{
 //Mostrar feed back incorrecto
 				msj.setText("Baja incorrecta. Esta Sede puede contener Máquinas!");

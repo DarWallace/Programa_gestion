@@ -25,9 +25,11 @@ public class AltaSede implements WindowListener, ActionListener
 	Button btnLimpiar = new Button("Limpiar");
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("");
+	String usuario;
 
-	public AltaSede()
+	public AltaSede(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 200);
 		ventana.setResizable(false);
@@ -93,9 +95,10 @@ public class AltaSede implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 // Hacer el Alta
-			if (!modelo.altaSede(connection, txtSede.getText(), txtLocalidad.getText()))
+			if (!modelo.altaSede(connection, txtSede.getText(), txtLocalidad.getText(), usuario))
 			{
 				mensaje.setText("Error en Alta");
+				
 			}
 			else
 			{

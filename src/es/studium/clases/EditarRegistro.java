@@ -1,52 +1,78 @@
 package es.studium.clases;
 
-
 import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Dialog;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.Label;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-public class EditarMaquina implements WindowListener, ActionListener
+public class EditarRegistro implements WindowListener, ActionListener
 {
-	Frame ventana = new Frame("Editar Maquina");
-	Label lblEleccion = new Label("Elegir una Maquina");
-	Choice choiceMaquina = new Choice();
+	Frame ventana = new Frame("Editar Registro");
+	Label lblEleccion = new Label("Elegir un Registro");
+	Choice choiceRegistro = new Choice();
 	Button bEditar = new Button("Editar");
 
 	Dialog cambio = new Dialog(ventana, "Modificación", true);
-	Label lblNombre = new Label("Maquina:");
-	TextField txtNombreMaquina = new TextField(20);
-	Label lblPrecio = new Label("Precio:");
-	TextField txtPrecioMaquina = new TextField(20);
-	Label lblSede = new Label("Sede de la Maquina:");
-	Choice choiceSede = new Choice();
+	Label lblNombre = new Label("Registro:");
+	Label lblDMY = new Label("         Dia         Mes        Año           ");
+	Choice choiceDia = new Choice();
+	Choice choiceMes = new Choice();
+	Choice choiceAnio = new Choice();
+
+	Label lblCliente = new Label("Cliente:");
+	Choice choiceCliente = new Choice();
+	Label lblMaquina = new Label("Maquina usada:");
+	Choice choiceMaquina = new Choice();
+	Button btnAceptar = new Button("Aceptar");
+	Button btnLimpiar = new Button("Limpiar");
+
 	Button bAceptar = new Button("Aceptar");
 
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("cambio correcto");
 	String usuario;
+	Date ahora = new Date();
+	SimpleDateFormat hoyDia = new SimpleDateFormat("dd");
+	SimpleDateFormat hoyMes = new SimpleDateFormat("MM");
+	SimpleDateFormat hoyAno = new SimpleDateFormat("yyy");
 
-	public EditarMaquina(String u)
+	public EditarRegistro(String u)
 	{
-		usuario=u;
+		usuario = u;
 		ventana.setLayout(new FlowLayout());
-		ventana.setSize(240, 200);
+		ventana.setSize(310, 200);
 
 		ventana.setResizable(false);
 		Modelo modelo = new Modelo();
 		Connection connection = modelo.conectar();
+		modelo.rellenarChoiceRegistros(connection, choiceRegistro);
 		modelo.rellenarChoiceMaquinas(connection, choiceMaquina);
-		modelo.rellenarChoiceSedes(connection, choiceSede);
+		modelo.rellenarChoiceClientes(connection, choiceCliente);
 		modelo.desconectar(connection);
-		ventana.add(choiceMaquina);
+		ventana.add(choiceRegistro);
+
+		// Rellenar Choices de Fecha
+		for (int i = 1; i <= 31; i++)
+		{
+			choiceDia.add(String.format("%02d", i));
+		}
+		for (int i = 1; i <= 12; i++)
+		{
+			choiceMes.add(String.format("%02d", i));
+		}
+		for (int i = 2024; i <= 2040; i++)
+		{
+			choiceAnio.add(String.valueOf(i));
+		}
 
 		bEditar.addActionListener(this);
 		ventana.add(bEditar);
@@ -57,11 +83,15 @@ public class EditarMaquina implements WindowListener, ActionListener
 		cambio.setSize(220, 250);
 		cambio.setResizable(false);
 		cambio.add(lblNombre);
-		cambio.add(txtNombreMaquina);
-		cambio.add(lblPrecio);
-		cambio.add(txtPrecioMaquina);
-		cambio.add(lblSede);
-		cambio.add(choiceSede);
+		cambio.add(lblDMY);
+		cambio.add(choiceDia);
+		cambio.add(choiceMes);
+		cambio.add(choiceAnio);
+
+		cambio.add(lblCliente);
+		cambio.add(choiceCliente);
+		cambio.add(lblMaquina);
+		cambio.add(choiceMaquina);
 		bAceptar.addActionListener(this);
 		cambio.add(bAceptar);
 		cambio.setLocationRelativeTo(null);
@@ -124,29 +154,37 @@ public class EditarMaquina implements WindowListener, ActionListener
 
 	public void actionPerformed(ActionEvent actionEvent)
 	{
-		String idMaquina = choiceMaquina.getSelectedItem().split(" - ")[0];
+		String idClienteFK = choiceCliente.getSelectedItem().split(" - ")[0];
+		String idMaquinaFK = choiceMaquina.getSelectedItem().split(" - ")[0];
+		String idRegistro = choiceRegistro.getSelectedItem().split(" - ")[0];
+		String dia = choiceDia.getSelectedItem();
+		String mes = choiceMes.getSelectedItem();
+		String anio = choiceAnio.getSelectedItem();
+		String fecha = anio + "-" + mes + "-" + dia;
 		if (actionEvent.getSource().equals(bEditar))
 		{
-			if (!choiceMaquina.getSelectedItem().equals("Seleccionar una Maquina..."))
+			if (!choiceRegistro.getSelectedItem().equals("Seleccionar un Registro..."))
 			{
 
+				// Conectarse a la BD
 				Modelo modelo = new Modelo();
 				Connection connection = modelo.conectar();
-				modelo.mostrarDatosMaquinas(connection, idMaquina, txtNombreMaquina, txtPrecioMaquina, choiceSede, usuario);
+				modelo.mostrarDatosRegistros(connection, idRegistro, choiceDia, choiceMes, choiceAnio, choiceCliente,
+						choiceMaquina, usuario);
 
 				cambio.setVisible(true);
 
 			} else
 			{
-				mensaje.setText("Debes elegir una Maquina");
+				mensaje.setText("Debes elegir un Registro");
 				feedback.setVisible(true);
 			}
 		} else if (actionEvent.getSource().equals(bAceptar))
 		{
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
-			String idSedeFk = choiceSede.getSelectedItem().split(" - ")[0];
-			if (!modelo.editarMaquina(connection, idMaquina, txtNombreMaquina.getText(), txtPrecioMaquina.getText(), idSedeFk, usuario))
+
+			if (!modelo.editarRegistro(connection, idRegistro, idClienteFK, fecha, idMaquinaFK, usuario))
 			{
 //Mostrar feed back incorrecto
 				mensaje.setText("Error en el cambio");

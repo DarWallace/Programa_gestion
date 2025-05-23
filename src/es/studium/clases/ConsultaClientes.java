@@ -22,14 +22,15 @@ public class ConsultaClientes implements WindowListener, ActionListener
 	Dialog feedback = new Dialog(ventana, "Datos exportados", true);
 	Label mensaje = new Label("");
 
-	
+	String usuario;
 	public static final String DEST = "Clientes.pdf";
 
-	public ConsultaClientes()
+	public ConsultaClientes(String u)
 	{
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		Connection connection = modelo.conectar();
-		txtArea.append(modelo.consultarClientes(connection));
+		txtArea.append(modelo.consultarClientes(connection, usuario));
 		modelo.desconectar(connection);
 		ventana.add(txtArea);
 		txtArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); 
@@ -59,7 +60,7 @@ public class ConsultaClientes implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 			System.out.println(txtArea.getText());
-			modelo.ImprimirClientes(DEST, txtArea.getText());
+			modelo.ImprimirClientes(DEST, txtArea.getText(), usuario);
 			feedback.setVisible(true);
 			// Desconectar
 			modelo.desconectar(connection);

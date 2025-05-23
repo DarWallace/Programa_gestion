@@ -29,10 +29,11 @@ public class EditarSede implements WindowListener, ActionListener
 
 	Dialog feedback = new Dialog(ventana, "Mensaje", true);
 	Label mensaje = new Label("cambio correcto");
+	String usuario;
 
-	public EditarSede()
+	public EditarSede(String u)
 	{
-
+		usuario=u;
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(240, 200);
 
@@ -125,7 +126,7 @@ public class EditarSede implements WindowListener, ActionListener
 
 				Modelo modelo = new Modelo();
 				Connection connection = modelo.conectar();
-				modelo.mostrarDatosSedes(connection, idSede, txtNombreSede, txtLocalidadSede);
+				modelo.mostrarDatosSedes(connection, idSede, txtNombreSede, txtLocalidadSede, usuario);
 
 				cambio.setVisible(true);
 
@@ -139,7 +140,7 @@ public class EditarSede implements WindowListener, ActionListener
 			Modelo modelo = new Modelo();
 			Connection connection = modelo.conectar();
 
-			if (!modelo.editarSede(connection, idSede, txtNombreSede.getText(), txtLocalidadSede.getText()))
+			if (!modelo.editarSede(connection, idSede, txtNombreSede.getText(), txtLocalidadSede.getText(), usuario))
 			{
 //Mostrar feed back incorrecto
 				mensaje.setText("Error en el cambio");

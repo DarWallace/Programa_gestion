@@ -16,9 +16,9 @@ public class Login implements WindowListener, ActionListener
 {
 	Frame ventana = new Frame("Login");
 	Label lblUsuario = new Label("Usuario:");
-	TextField txtUsuario = new TextField(20);
+	TextField txtUsuario = new TextField("Juan");
 	Label lblClave = new Label("Clave:");
-	TextField txtClave = new TextField(20);
+	TextField txtClave = new TextField("Soyjefe23#");
 	Button btnAceptar = new Button("Aceptar");
 	Button btnLimpiar = new Button("Limpiar");
 
@@ -108,7 +108,8 @@ public class Login implements WindowListener, ActionListener
 			else
 			{
 				ventana.setVisible(false);
-				new MenuPrincipal(tipo);
+				new MenuPrincipal(tipo,txtUsuario.getText());
+				
 			}
 
 		}
