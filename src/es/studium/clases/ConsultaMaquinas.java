@@ -11,7 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.sql.Connection;
+
+import javax.imageio.ImageIO;
 
 public class ConsultaMaquinas implements WindowListener, ActionListener
 {
@@ -27,6 +31,18 @@ public class ConsultaMaquinas implements WindowListener, ActionListener
 	public ConsultaMaquinas(String u)
 	{
 		usuario=u;
+		try
+		{
+
+			BufferedImage icon = ImageIO.read(new File("img/logo2.jpg"));
+			ventana.setIconImage(icon);
+			feedback.setIconImage(icon);
+			
+
+		} catch (Exception e)
+		{
+			System.out.println("error en icono");
+		}
 		ventana.setLayout(new FlowLayout());
 
 		Connection connection = modelo.conectar();
@@ -56,14 +72,13 @@ public class ConsultaMaquinas implements WindowListener, ActionListener
 	{	
 		if (actionEvent.getSource().equals(exportar))
 		{
-			// Conectarse a la BD
+			
 			Modelo modelo = new Modelo();
-			Connection connection = modelo.conectar();
 			System.out.println(txtArea.getText());
 			modelo.ImprimirMaquinas(DEST, txtArea.getText(), usuario);
 			feedback.setVisible(true);
-			// Desconectar
-			modelo.desconectar(connection);
+			
+			
 		}
 	}
 	@Override

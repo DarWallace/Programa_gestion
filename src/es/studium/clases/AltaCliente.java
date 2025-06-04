@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.sql.Connection;
 
-
+import javax.imageio.ImageIO;
 
 public class AltaCliente implements WindowListener, ActionListener
 {
@@ -29,11 +31,22 @@ public class AltaCliente implements WindowListener, ActionListener
 
 	public AltaCliente(String u)
 	{
-		usuario=u;
+		usuario = u;
+		try
+		{
+
+			BufferedImage icon = ImageIO.read(new File("img/logo2.jpg"));
+			ventana.setIconImage(icon);
+			feedback.setIconImage(icon);
+
+		} catch (Exception e)
+		{
+			System.out.println("error en icono");
+		}
 		ventana.setLayout(new FlowLayout());
 		ventana.setSize(220, 200);
 		ventana.setResizable(false);
-		
+
 		ventana.add(lblcliente);
 		ventana.add(txtCliente);
 		ventana.add(lblTelefono);
@@ -50,38 +63,47 @@ public class AltaCliente implements WindowListener, ActionListener
 		feedback.add(mensaje);
 		feedback.setLocationRelativeTo(null);
 		feedback.addWindowListener(this);
-		
+
 		ventana.setLocationRelativeTo(null);
 		ventana.setVisible(true);
 
 	}
-	
 
 	public void windowActivated(WindowEvent windowEvent)
-	{	}
+	{
+	}
+
 	public void windowClosed(WindowEvent windowEvent)
-	{	}
+	{
+	}
 
 	public void windowClosing(WindowEvent windowEvent)
 	{
 		if (windowEvent.getSource().equals(feedback))
 		{
 			feedback.setVisible(false);
-		}
-		else if (windowEvent.getSource().equals(ventana))
+		} else if (windowEvent.getSource().equals(ventana))
 		{
 			ventana.setVisible(false);
 		}
 	}
 
 	public void windowDeactivated(WindowEvent windowEvent)
-	{	}
+	{
+	}
+
 	public void windowDeiconified(WindowEvent windowEvent)
-	{	}
+	{
+	}
+
 	public void windowIconified(WindowEvent windowEvent)
-	{	}
+	{
+	}
+
 	public void windowOpened(WindowEvent windowEvent)
-	{	}
+	{
+	}
+
 	public void actionPerformed(ActionEvent actionEvent)
 	{
 		if (actionEvent.getSource().equals(btnLimpiar))
@@ -89,8 +111,7 @@ public class AltaCliente implements WindowListener, ActionListener
 			txtCliente.setText("");
 			txtTelefono.setText("");
 			txtCliente.requestFocus();
-		}
-		else if (actionEvent.getSource().equals(btnAceptar))
+		} else if (actionEvent.getSource().equals(btnAceptar))
 		{
 // Conectarse a la BD
 			Modelo modelo = new Modelo();
@@ -100,8 +121,7 @@ public class AltaCliente implements WindowListener, ActionListener
 			{
 // Mensaje de error 
 				mensaje.setText("Error en Alta");
-			}
-			else
+			} else
 			{
 // mensaje aceptación y borrado de los text
 				mensaje.setText("Alta Correcta");

@@ -12,6 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class MenuPrincipal extends Frame implements WindowListener, ActionListener
 
@@ -27,6 +31,7 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 	Menu mnuClientes = new Menu("Clientes");
 	Menu mnuMaquinas = new Menu("Máquinas");
 	Menu mnuRegistros = new Menu("Registros");
+	Menu mnuAyuda = new Menu("Ayuda");
 
 	MenuItem mniConsultaSedes = new MenuItem("Consulta");
 	MenuItem mniAltaSede = new MenuItem("Alta");
@@ -47,14 +52,27 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 	MenuItem mniAltaRegistro = new MenuItem("Alta");
 	MenuItem mniBajaRegistro = new MenuItem("Baja");
 	MenuItem mniEditarRegistro = new MenuItem("Edición");
+
+	MenuItem mniAyuda = new MenuItem("?");
+
 	int tipo;
 	String usuario;
 
 	public MenuPrincipal(int t, String u)
 
 	{
-		usuario=u;
+		usuario = u;
 		tipo = t;
+		try
+		{
+
+			BufferedImage icon = ImageIO.read(new File("img/logo2.jpg"));
+			this.setIconImage(icon);
+
+		} catch (Exception e)
+		{
+			System.out.println("error en icono");
+		}
 		setTitle("Menú Principal");
 		setLayout(new FlowLayout());
 		addWindowListener(this);
@@ -111,11 +129,14 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 			mnuRegistros.add(mniBajaRegistro);
 			mnuRegistros.add(mniEditarRegistro);
 		}
+		mniAyuda.addActionListener(this);
+		mnuAyuda.add(mniAyuda);
 
 		barraMenu.add(mnuSedes);
 		barraMenu.add(mnuClientes);
 		barraMenu.add(mnuMaquinas);
 		barraMenu.add(mnuRegistros);
+		barraMenu.add(mnuAyuda);
 		setSize(310, 227);
 
 		setLocationRelativeTo(null);
@@ -218,6 +239,11 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 		} else if (actionEvent.getSource().equals(mniEditarRegistro))
 		{
 			new EditarRegistro(usuario);
+		} 
+		
+		else if (actionEvent.getSource().equals(mniAyuda))
+		{
+			Modelo.ayuda();
 		}
 
 	}

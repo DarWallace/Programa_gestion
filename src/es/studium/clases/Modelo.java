@@ -82,11 +82,12 @@ public class Modelo
 		try
 		{
 			statement = conexion.createStatement();
+			guardarLog(usuario, "Usuario registrado");
 			rs = statement.executeQuery(sentencia);
 			if (rs.next() == true)
 			{
 				tipo = rs.getInt("tipoUsuario");
-				guardarLog(usuario, "Usuario registrado");
+
 			}
 		} catch (SQLException e)
 		{
@@ -108,7 +109,7 @@ public class Modelo
 				guardarLog(usuario, sentencia);
 				statement.executeUpdate(sentencia);
 				altaCorrecta = true;
-				
+
 			} catch (SQLException e)
 			{
 				altaCorrecta = false;
@@ -116,7 +117,6 @@ public class Modelo
 		}
 		return altaCorrecta;
 	}
-
 	public boolean altaMaquina(Connection conexion, String maquina, String precio, String idSede, String usuario)
 	{
 		boolean altaCorrecta = false;
@@ -139,30 +139,48 @@ public class Modelo
 		}
 		return altaCorrecta;
 	}
-	
 	public boolean altaRegistro(Connection conexion, String idClienteFK, String fecha, String idMaquinaFK, String usuario)
 	{
-	    boolean altaCorrecta = false;
-	    if (!fecha.isBlank())
-	    {
-	        sentencia = "INSERT INTO registros VALUES (null," + Integer.parseInt(idClienteFK) + ",'" + fecha + "',"
-	                + Integer.parseInt(idMaquinaFK) + ");";
-	        try
-	        {
-	            statement = conexion.createStatement();
-	            guardarLog(usuario, sentencia);
-	            statement.executeUpdate(sentencia);
-	            altaCorrecta = true;
-	        } catch (SQLException e)
-	        {
-	            altaCorrecta = false;
-	            System.out.println("Error en sentencia");
-	            System.out.println(sentencia);
-	        }
-	    }
-	    return altaCorrecta;
+		boolean altaCorrecta = false;
+		if (!fecha.isBlank())
+		{
+			sentencia = "INSERT INTO registros VALUES (null," + Integer.parseInt(idClienteFK) + ",'" + fecha + "',"
+					+ Integer.parseInt(idMaquinaFK) + ");";
+			try
+			{
+				statement = conexion.createStatement();
+				guardarLog(usuario, sentencia);
+				statement.executeUpdate(sentencia);
+				altaCorrecta = true;
+			} catch (SQLException e)
+			{
+				altaCorrecta = false;
+				System.out.println("Error en sentencia");
+				System.out.println(sentencia);
+			}
+		}
+		return altaCorrecta;
 	}
-
+	public boolean altaCliente(Connection conexion, String nombre, String telefono, String usuario)
+	{
+		boolean altaCorrecta = false;
+		if (!nombre.isBlank() && !telefono.isBlank())
+		{
+			sentencia = "INSERT INTO Clientes VALUES (null,'" + nombre + "','" + telefono + "');";
+			try
+			{
+				statement = conexion.createStatement();
+				guardarLog(usuario, sentencia);
+				statement.executeUpdate(sentencia);
+				altaCorrecta = true;
+			} catch (SQLException e)
+			{
+				altaCorrecta = false;
+			}
+		}
+		return altaCorrecta;
+	}
+	
 	public boolean bajaSede(Connection conexion, String idSede, String usuario)
 	{
 		boolean resultado = false;
@@ -211,7 +229,23 @@ public class Modelo
 		}
 		return resultado;
 	}
-
+	public boolean bajaCliente(Connection conexion, String idCliente, String usuario)
+	{
+		boolean resultado = false;
+		sentencia = "DELETE FROM clientes WHERE idCliente = " + idCliente + ";";
+		try
+		{
+			statement = conexion.createStatement();
+			guardarLog(usuario, sentencia);
+			statement.executeUpdate(sentencia);
+			resultado = true;
+		} catch (SQLException sqlex)
+		{
+			resultado = false;
+		}
+		return resultado;
+	}
+	
 	public boolean editarSede(Connection conexion, String idSede, String nombre, String localidad, String usuario)
 	{
 		boolean edicionCorrecta = false;
@@ -232,7 +266,6 @@ public class Modelo
 		}
 		return edicionCorrecta;
 	}
-	
 	public boolean editarMaquina(Connection conexion, String idMaquina, String nombre, String precio, String idSedeFk, String usuario)
 	{
 		boolean edicionCorrecta = false;
@@ -253,14 +286,13 @@ public class Modelo
 		}
 		return edicionCorrecta;
 	}
-	
 	public boolean editarRegistro(Connection conexion, String idRegistro, String idClienteFK, String fecha, String idMaquinaFK, String usuario)
 	{
 		boolean edicionCorrecta = false;
 		if (!fecha.isBlank())
 		{
 			sentencia = "UPDATE registros SET idClienteFK = " + Integer.parseInt(idClienteFK) + ", fechaUso = '" + fecha+ "', idMaquinaFK = " 
-						+ Integer.parseInt(idMaquinaFK)
+					+ Integer.parseInt(idMaquinaFK)
 					+ " WHERE idRegistro = " + idRegistro + ";";
 			try
 			{
@@ -276,7 +308,27 @@ public class Modelo
 		}
 		return edicionCorrecta;
 	}
-
+	public boolean editarCliente(Connection conexion, String idCliente, String nombre, String telefono, String usuario)
+	{
+		boolean edicionCorrecta = false;
+		if (!nombre.isBlank() && !telefono.isBlank())
+		{
+			sentencia = "UPDATE clientes SET nombreCliente = '" + nombre + "', telefonoCliente = '" + telefono
+					+ "' WHERE idCliente = " + idCliente + ";";
+			try
+			{
+				statement = conexion.createStatement();
+				guardarLog(usuario, sentencia);
+				statement.executeUpdate(sentencia);
+				edicionCorrecta = true;
+			} catch (SQLException e)
+			{
+				edicionCorrecta = false;
+			}
+		}
+		return edicionCorrecta;
+	}
+	
 	public void rellenarChoiceSedes(Connection conexion, Choice ch)
 	{
 		ch.removeAll();
@@ -331,10 +383,29 @@ public class Modelo
 			System.out.println("Error sentencia SQL");
 		}
 	}
+	public void rellenarChoiceClientes(Connection conexion, Choice ch)
+	{
+		ch.removeAll();
+		ch.add("Seleccionar un Cliente...");
+		try
+		{
+			statement = conexion.createStatement();
+			sentencia = "SELECT * FROM clientes";
+			rs = statement.executeQuery(sentencia);
+			while (rs.next())
+			{
+				ch.add(rs.getInt("idCliente") + " - " + rs.getString("nombreCliente"));
+			}
+		} catch (SQLException sqlex)
+		{
+			System.out.println("Error sentencia SQL");
+		}
+	}
+	
 	public void mostrarDatosSedes(Connection conexion, String idSede, TextField txtNombreSede,
 			TextField txtLocalidadSede, String usuario)
 	{
-		
+
 
 		try
 		{
@@ -383,14 +454,13 @@ public class Modelo
 				// Seleccionamos el índice (aunque esté al final del bucle)
 				choiceSede.select(indiceSeleccionar);
 			}
-//			
+			//			
 		} catch (SQLException sqlex)
 		{
 			System.out.println("Error  mostrar sentencia SQL");
 		}
 
 	}
-	
 	public void mostrarDatosRegistros(Connection conexion, String idRegistro,
 			Choice choiceDia, Choice choiceMes, Choice choiceAnio,
 			Choice choiceCliente, Choice choiceMaquina, String usuario)
@@ -402,8 +472,9 @@ public class Modelo
 			sentencia = "SELECT * FROM registros WHERE idRegistro =" + idRegistro;
 			guardarLog(usuario, sentencia);
 			rs = statement.executeQuery(sentencia);
+
 			if (rs.next())
-			{
+			{ 
 				// FECHA
 				String fecha = rs.getString("fechaUso"); // formato yyyy-MM-dd
 				String[] partes = fecha.split("-"); // [0]=yyyy, [1]=MM, [2]=dd
@@ -415,7 +486,7 @@ public class Modelo
 				choiceDia.select(dia);
 				choiceMes.select(mes);
 				choiceAnio.select(anio);
-				
+
 				int idClienteRegis = rs.getInt("idClienteFK");
 
 				// Inicializa la posición a seleccionar como no encontrada
@@ -433,7 +504,7 @@ public class Modelo
 
 				// Seleccionamos el índice (aunque esté al final del bucle)
 				choiceCliente.select(indiceSeleccionar);
-				
+
 				int idMaquinaRegis = rs.getInt("idMaquinaFK");
 
 				// Inicializa la posición a seleccionar como no encontrada
@@ -452,7 +523,7 @@ public class Modelo
 				// Seleccionamos el índice (aunque esté al final del bucle)
 				choiceMaquina.select(indiceSeleccionar2);
 			}
-//			
+			//			
 		} catch (SQLException sqlex)
 		{
 			System.out.println("Error  mostrar sentencia SQL");
@@ -460,7 +531,26 @@ public class Modelo
 		}
 
 	}
+	public void mostrarDatosClientes(Connection conexion, String idCliente, TextField txtNombreCliente,
+			TextField txtLocalidadCliente, String usuario)
+	{
 
+		try
+		{
+			statement = conexion.createStatement();
+			sentencia = "SELECT * FROM clientes WHERE idCliente =" + idCliente;
+			guardarLog(usuario, sentencia);
+			rs = statement.executeQuery(sentencia);
+			rs.next();
+			txtNombreCliente.setText(rs.getString("nombreCliente"));
+			txtLocalidadCliente.setText(rs.getString("telefonoCliente"));
+		} catch (SQLException sqlex)
+		{
+			System.out.println("Error  mostrar sentencia SQL");
+		}
+
+	}
+	
 	public String consultarSedes(Connection conexion, String usuario)
 	{
 		{
@@ -474,22 +564,21 @@ public class Modelo
 				while (rs.next())
 				{
 					contenidoTextarea = contenidoTextarea + String.format("%-8d - %-18s - %-10s\n",
-							 rs.getInt("idSede"),
-							 rs.getString("nombreSede"),
-							 rs.getString("localidadSede"));
-					
+							rs.getInt("idSede"),
+							rs.getString("nombreSede"),
+							rs.getString("localidadSede"));
+
 				}
 
 			} catch (SQLException sqlex)
 
 			{
-				
+
 				System.out.println("Error en SQL");
 			}
 			return contenidoTextarea;
 		}
 	}
-	
 	public String consultarMaquinas(Connection conexion, String usuario)
 	{
 		{
@@ -549,7 +638,6 @@ public class Modelo
 			return contenidoTextarea;
 		}
 	}
-
 	public String consultarClientes(Connection conexion, String usuario)
 	{
 		{
@@ -566,7 +654,7 @@ public class Modelo
 							rs.getInt("idCliente"),
 							rs.getString("nombreCliente"),
 							rs.getString("telefonoCliente"));
-					
+
 				}
 
 			} catch (SQLException sqlex)
@@ -577,131 +665,34 @@ public class Modelo
 			return contenidoTextarea;
 		}
 	}
-
-	public boolean altaCliente(Connection conexion, String nombre, String telefono, String usuario)
-	{
-		boolean altaCorrecta = false;
-		if (!nombre.isBlank() && !telefono.isBlank())
-		{
-			sentencia = "INSERT INTO Clientes VALUES (null,'" + nombre + "','" + telefono + "');";
-			try
-			{
-				statement = conexion.createStatement();
-				guardarLog(usuario, sentencia);
-				statement.executeUpdate(sentencia);
-				altaCorrecta = true;
-			} catch (SQLException e)
-			{
-				altaCorrecta = false;
-			}
-		}
-		return altaCorrecta;
-	}
-
-	public boolean bajaCliente(Connection conexion, String idCliente, String usuario)
-	{
-		boolean resultado = false;
-		sentencia = "DELETE FROM clientes WHERE idCliente = " + idCliente + ";";
-		try
-		{
-			statement = conexion.createStatement();
-			guardarLog(usuario, sentencia);
-			statement.executeUpdate(sentencia);
-			resultado = true;
-		} catch (SQLException sqlex)
-		{
-			resultado = false;
-		}
-		return resultado;
-	}
-
-	public void rellenarChoiceClientes(Connection conexion, Choice ch)
-	{
-		ch.removeAll();
-		ch.add("Seleccionar un Cliente...");
-		try
-		{
-			statement = conexion.createStatement();
-			sentencia = "SELECT * FROM clientes";
-			rs = statement.executeQuery(sentencia);
-			while (rs.next())
-			{
-				ch.add(rs.getInt("idCliente") + " - " + rs.getString("nombreCliente"));
-			}
-		} catch (SQLException sqlex)
-		{
-			System.out.println("Error sentencia SQL");
-		}
-	}
-
-	public boolean editarCliente(Connection conexion, String idCliente, String nombre, String telefono, String usuario)
-	{
-		boolean edicionCorrecta = false;
-		if (!nombre.isBlank() && !telefono.isBlank())
-		{
-			sentencia = "UPDATE clientes SET nombreCliente = '" + nombre + "', telefonoCliente = '" + telefono
-					+ "' WHERE idCliente = " + idCliente + ";";
-			try
-			{
-				statement = conexion.createStatement();
-				guardarLog(usuario, sentencia);
-				statement.executeUpdate(sentencia);
-				edicionCorrecta = true;
-			} catch (SQLException e)
-			{
-				edicionCorrecta = false;
-			}
-		}
-		return edicionCorrecta;
-	}
-
-	public void mostrarDatosClientes(Connection conexion, String idCliente, TextField txtNombreCliente,
-			TextField txtLocalidadCliente, String usuario)
-	{
-
-		try
-		{
-			statement = conexion.createStatement();
-			sentencia = "SELECT * FROM clientes WHERE idCliente =" + idCliente;
-			guardarLog(usuario, sentencia);
-			rs = statement.executeQuery(sentencia);
-			rs.next();
-			txtNombreCliente.setText(rs.getString("nombreCliente"));
-			txtLocalidadCliente.setText(rs.getString("telefonoCliente"));
-		} catch (SQLException sqlex)
-		{
-			System.out.println("Error  mostrar sentencia SQL");
-		}
-
-	}
-
+	
 	public void ImprimirClientes(String dest, String datos, String usuario)
 	{
 		guardarLog(usuario, "Exportación de datos de Clientes");
 		try
 		{
-//Initialize PDF writer 
+			//Initialize PDF writer 
 			PdfWriter writer = new PdfWriter(dest);
-//Initialize PDF document 
+			//Initialize PDF document 
 			PdfDocument pdf = new PdfDocument(writer);
-// Initialize document 
+			// Initialize document 
 			Document document = new Document(pdf, PageSize.A4.rotate());
 			document.setMargins(20, 20, 20, 20);
 			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 			PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-			
+
 			Table table = new Table(UnitValue.createPercentArray(new float[] { 20, 40, 40 }))
-	                .useAllAvailableWidth();
-// Reading Headers
-			 String[] lineas = datos.split("\\n");
-			 for (int i = 0; i < lineas.length; i++) {
-		            String linea = lineas[i].trim();
-		            if (!linea.isEmpty()) {
-		                process(table, linea, (i == 0 ? bold : font), (i == 0));
-		            }
-		        }
+					.useAllAvailableWidth();
+			// Reading Headers
+			String[] lineas = datos.split("\\n");
+			for (int i = 0; i < lineas.length; i++) {
+				String linea = lineas[i].trim();
+				if (!linea.isEmpty()) {
+					process(table, linea, (i == 0 ? bold : font), (i == 0));
+				}
+			}
 			document.add(table);
-//Close document 
+			//Close document 
 			document.close();
 
 			Desktop.getDesktop().open(new File(dest));
@@ -713,28 +704,28 @@ public class Modelo
 		guardarLog(usuario, "Exportación de datos de Maquinas");
 		try
 		{
-//Initialize PDF writer 
+			//Initialize PDF writer 
 			PdfWriter writer = new PdfWriter(dest);
-//Initialize PDF document 
+			//Initialize PDF document 
 			PdfDocument pdf = new PdfDocument(writer);
-// Initialize document 
+			// Initialize document 
 			Document document = new Document(pdf, PageSize.A4.rotate());
 			document.setMargins(20, 20, 20, 20);
 			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 			PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-			
+
 			Table table = new Table(UnitValue.createPercentArray(new float[] { 20, 40, 30, 20 }))
-	                .useAllAvailableWidth();
-// Reading Headers
-			 String[] lineas = datos.split("\\n");
-			 for (int i = 0; i < lineas.length; i++) {
-		            String linea = lineas[i].trim();
-		            if (!linea.isEmpty()) {
-		                process(table, linea, (i == 0 ? bold : font), (i == 0));
-		            }
-		        }
+					.useAllAvailableWidth();
+			// Reading Headers
+			String[] lineas = datos.split("\\n");
+			for (int i = 0; i < lineas.length; i++) {
+				String linea = lineas[i].trim();
+				if (!linea.isEmpty()) {
+					process(table, linea, (i == 0 ? bold : font), (i == 0));
+				}
+			}
 			document.add(table);
-//Close document 
+			//Close document 
 			document.close();
 
 			Desktop.getDesktop().open(new File(dest));
@@ -746,28 +737,28 @@ public class Modelo
 		guardarLog(usuario, "Exportación de datos de Registros");
 		try
 		{
-//Initialize PDF writer 
+			//Initialize PDF writer 
 			PdfWriter writer = new PdfWriter(dest);
-//Initialize PDF document 
+			//Initialize PDF document 
 			PdfDocument pdf = new PdfDocument(writer);
-// Initialize document 
+			// Initialize document 
 			Document document = new Document(pdf, PageSize.A4.rotate());
 			document.setMargins(20, 20, 20, 20);
 			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 			PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-			
+
 			Table table = new Table(UnitValue.createPercentArray(new float[] { 20, 40, 30, 20 }))
-	                .useAllAvailableWidth();
-// Reading Headers
-			 String[] lineas = datos.split("\\n");
-			 for (int i = 0; i < lineas.length; i++) {
-		            String linea = lineas[i].trim();
-		            if (!linea.isEmpty()) {
-		                process(table, linea, (i == 0 ? bold : font), (i == 0));
-		            }
-		        }
+					.useAllAvailableWidth();
+			// Reading Headers
+			String[] lineas = datos.split("\\n");
+			for (int i = 0; i < lineas.length; i++) {
+				String linea = lineas[i].trim();
+				if (!linea.isEmpty()) {
+					process(table, linea, (i == 0 ? bold : font), (i == 0));
+				}
+			}
 			document.add(table);
-//Close document 
+			//Close document 
 			document.close();
 
 			Desktop.getDesktop().open(new File(dest));
@@ -779,28 +770,28 @@ public class Modelo
 		guardarLog(usuario, "Exportación de datos de sedes");
 		try
 		{
-//Initialize PDF writer 
+			//Initialize PDF writer 
 			PdfWriter writer = new PdfWriter(dest);
-//Initialize PDF document 
+			//Initialize PDF document 
 			PdfDocument pdf = new PdfDocument(writer);
-// Initialize document 
+			// Initialize document 
 			Document document = new Document(pdf, PageSize.A4.rotate());
 			document.setMargins(20, 20, 20, 20);
 			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 			PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
-			
+
 			Table table = new Table(UnitValue.createPercentArray(new float[] { 20, 40, 30 }))
-	                .useAllAvailableWidth();
-// Reading Headers
-			 String[] lineas = datos.split("\\n");
-			 for (int i = 0; i < lineas.length; i++) {
-		            String linea = lineas[i].trim();
-		            if (!linea.isEmpty()) {
-		                process(table, linea, (i == 0 ? bold : font), (i == 0));
-		            }
-		        }
+					.useAllAvailableWidth();
+			// Reading Headers
+			String[] lineas = datos.split("\\n");
+			for (int i = 0; i < lineas.length; i++) {
+				String linea = lineas[i].trim();
+				if (!linea.isEmpty()) {
+					process(table, linea, (i == 0 ? bold : font), (i == 0));
+				}
+			}
 			document.add(table);
-//Close document 
+			//Close document 
 			document.close();
 
 			Desktop.getDesktop().open(new File(dest));
@@ -810,21 +801,21 @@ public class Modelo
 
 	public void process(Table table, String line, PdfFont font, boolean isHeader)
 	{
-		 String[] tokens = line.split("\\s*-\\s*");
-		 for (String token : tokens) {
-		        if (isHeader) {
-		            table.addHeaderCell(new Cell().add(new Paragraph(token.trim()).setFont(font)));
-		        } else {
-		            table.addCell(new Cell().add(new Paragraph(token.trim()).setFont(font)));
-		        }
-		    }
-		 }
-	
+		String[] tokens = line.split("\\s*-\\s*");
+		for (String token : tokens) {
+			if (isHeader) {
+				table.addHeaderCell(new Cell().add(new Paragraph(token.trim()).setFont(font)));
+			} else {
+				table.addCell(new Cell().add(new Paragraph(token.trim()).setFont(font)));
+			}
+		}
+	}
+
 	public void guardarLog(String usuario, String mensaje) {
 		//[01/04/2025][11:50:40][usuario][mensaje]
 		Date ahora = new Date();
 		SimpleDateFormat formateador= new SimpleDateFormat("[dd/MM/yyyy][HH:mm:ss.S]");
-		
+
 		try
 		{
 			// Destino de los datos
@@ -844,6 +835,20 @@ public class Modelo
 		{
 			System.out.println("Se produjo un error de Archivo");
 		}}
-	
+
+	public static void ayuda()
+	{
+		try
+		{
+			ProcessBuilder pb = new ProcessBuilder("hh.exe", "AyudaGestion.chm");
+			pb.start();
+			System.out.println("Abriendo el archivo CHM...");
+		}
+		catch (IOException e)
+		{
+			System.err.println("Error al intentar abrir el archivo CHM: " + e.getMessage());
+		}
+	}
+
 
 }
