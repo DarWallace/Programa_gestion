@@ -234,3 +234,5 @@
 [03/06/2025][09:27:48.499] [Juan] [Usuario registrado]
 [03/06/2025][09:27:58.710] [Juan] [Usuario registrado]
 [03/06/2025][09:33:13.865] [Juan] [Usuario registrado]
+[04/06/2025][08:59:42.818] [Juan] [Usuario registrado]
+[04/06/2025][09:12:26.750] [Juan] [Usuario registrado]

@@ -138,8 +138,9 @@ public class MenuPrincipal extends Frame implements WindowListener, ActionListen
 		barraMenu.add(mnuRegistros);
 		barraMenu.add(mnuAyuda);
 		setSize(310, 227);
-
+		setResizable(false);
 		setLocationRelativeTo(null);
+		
 		setVisible(true);
 	}
 
